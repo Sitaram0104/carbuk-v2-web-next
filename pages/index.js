@@ -193,7 +193,7 @@ export default function Home() {
               alt="logo"
               style={{ background: "black" }}
             />
-            <h1 className="text-white user-select-none">Welcome to Carbuk</h1>
+            <h2 className="text-white user-select-none">Welcome to Carbuk</h2>
           </div>
           <Form
             onSubmit={(e) => {
