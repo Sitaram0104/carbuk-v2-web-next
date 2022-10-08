@@ -95,7 +95,7 @@ export default function Home() {
               </label>
               <button
                 type="button"
-                className="btn btn-secondary btn-sm ms-4 px-4"
+                className="btn btn-secondary btn-sm ms-4 px-3"
               >
                 -
               </button>
@@ -105,7 +105,7 @@ export default function Home() {
               >
                 1
               </button>
-              <button type="button" className="btn btn-secondary btn-sm px-4">
+              <button type="button" className="btn btn-secondary btn-sm px-3">
                 +
               </button>
             </div>
