@@ -21,7 +21,7 @@ export default function Home() {
   const [noofPersons, setNoofPersons] = useState(1);
   const [carType, setCarType] = useState("Sedan");
   const [emailId, setEmailId] = useState("");
-  const [mobile, setMobile] = useState(1);
+  const [mobileNumber, setMobileNumber] = useState(null);
 
   const [modalShow, setModalShow] = useState(false);
   const count = useSelector(selectValue);
@@ -73,7 +73,7 @@ export default function Home() {
             </div>
             <div className="d-flex flex-row align-items-center justify-content-center">
               <p className="fw-bold fst-italic m-0">Mobile Number: </p>
-              <p className="text-muted ms-1 m-0">{mobile}</p>
+              <p className="text-muted ms-1 m-0">{mobileNumber}</p>
             </div>
           </div>
         </Modal.Body>
@@ -117,7 +117,7 @@ export default function Home() {
               <div className="form-floating mb-3 w-50">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${!pickup && "bg-secondary"}`}
                   id="pickupInput"
                   placeholder="Kharagpur"
                   value={pickup}
@@ -128,7 +128,7 @@ export default function Home() {
               <div className="form-floating mb-3 w-50">
                 <input
                   type="text"
-                  className="form-control"
+                  className={`form-control ${!destination && "bg-secondary"}`}
                   id="destinationInput"
                   placeholder="Kolkata"
                   value={destination}
@@ -141,7 +141,7 @@ export default function Home() {
               <div className="form-floating w-50">
                 <input
                   type="time"
-                  className="form-control"
+                  className={`form-control ${!pickupTime && "bg-secondary"}`}
                   id="pickupTimeInput"
                   placeholder="13:21"
                   value={pickupTime}
@@ -152,7 +152,7 @@ export default function Home() {
               <div className="form-floating w-50">
                 <input
                   type="date"
-                  className="form-control"
+                  className={`form-control ${!pickupDate && "bg-secondary"}`}
                   id="pickupDateInput"
                   placeholder="2022-01-01"
                   value={pickupDate}
@@ -208,32 +208,41 @@ export default function Home() {
             </div>
             <div className="form-floating mb-3">
               <input
-                type="search"
-                className="form-control"
-                id="floatingInput"
-                placeholder="name@example.com"
+                type="text"
+                className={`form-control ${
+                  (CarTypes.includes(carType) || carType === "") &&
+                  "bg-secondary"
+                }`}
+                id="carNameInput"
+                placeholder="carName"
+                value={CarTypes.includes(carType) ? "" : carType}
+                onChange={(e) => setCarType(e.target.value)}
               />
-              <label htmlFor="floatingInput">
+              <label htmlFor="carNameInput">
                 Type Car Name for any Specific Type
               </label>
             </div>
             <div className="form-floating mb-3">
               <input
                 type="email"
-                className="form-control"
-                id="floatingInput"
+                className={`form-control ${!emailId && "bg-secondary"}`}
+                id="emailInput"
                 placeholder="name@example.com"
+                value={emailId}
+                onChange={(e) => setEmailId(e.target.value)}
               />
-              <label htmlFor="floatingInput">Your email id is:</label>
+              <label htmlFor="emailInput">Your email id is:</label>
             </div>
             <div className="form-floating mb-3">
               <input
                 type="number"
-                className="form-control"
-                id="floatingInput"
-                placeholder="name@example.com"
+                className={`form-control ${!mobileNumber && "bg-secondary"}`}
+                id="mobileInput"
+                placeholder="0000-000-000"
+                value={mobileNumber}
+                onChange={(e) => setMobileNumber(e.target.value)}
               />
-              <label htmlFor="floatingInput">Mobile number</label>
+              <label htmlFor="mobileInput">Mobile number</label>
               <div className="text-center small text-muted">
                 (We will send OTP to the mobile number)
               </div>
