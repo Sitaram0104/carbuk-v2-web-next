@@ -119,6 +119,7 @@ export default function Home() {
               height={50}
               alt="loading"
             />
+            <p className="fw-bold m-0">Booking Details</p>
             <div className="d-flex flex-row align-items-center justify-content-center lh-sm">
               <div className="card p-2 text-center lh-sm">
                 <div className="d-flex flex-row align-items-center justify-content-center">
@@ -274,14 +275,14 @@ export default function Home() {
                   setNoofPersons(noofPersons > 1 ? noofPersons - 1 : 1)
                 }
               >
-                <h2
+                <h4
                   style={{
                     position: "relative",
-                    top: "-14px",
+                    top: "-50%",
                   }}
                 >
                   -
-                </h2>
+                </h4>
               </button>
               <button
                 type="button"
@@ -299,7 +300,7 @@ export default function Home() {
                 <h4
                   style={{
                     position: "relative",
-                    top: "-8px",
+                    top: "-50%",
                   }}
                 >
                   +
