@@ -278,7 +278,7 @@ export default function Home() {
                 <h4
                   style={{
                     position: "relative",
-                    top: "-50%",
+                    top: "-30%",
                   }}
                 >
                   -
@@ -300,7 +300,7 @@ export default function Home() {
                 <h4
                   style={{
                     position: "relative",
-                    top: "-50%",
+                    top: "-40%",
                   }}
                 >
                   +
