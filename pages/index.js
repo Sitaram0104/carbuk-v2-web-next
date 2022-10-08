@@ -27,10 +27,17 @@ export default function Home() {
         src="/car-gray-2.jpg"
         layout="fill"
         style={{ filter: "blur(2px)" }}
+        alt="background-image"
       />
       <div style={{ zIndex: 1, backdropFilter: "blur(14px)", padding: "1rem" }}>
         <div className="mb-3 d-flex flex-row">
-          <Image src="/carbuk_logo.png" layout="fixed" width={70} height={40} />
+          <Image
+            src="/carbuk_logo.png"
+            layout="fixed"
+            width={70}
+            height={40}
+            alt="logo"
+          />
           <h1 className="text-white">Welcome to Carbuk</h1>
         </div>
         <form>
