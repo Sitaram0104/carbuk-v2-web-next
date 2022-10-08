@@ -77,22 +77,19 @@ export default function Home() {
                   id="otp"
                   className="inputs d-flex flex-row justify-content-center mt-2"
                 >
-                  <div className="mb-3 ">
-                    <Form.Control
-                      type="number"
-                      placeholder="0000"
-                      className="text-center"
-                      autoFocus
-                      value={otp}
-                      onChange={(e) => {
-                        setOtp(
-                          e.target.value.toString().length <= 4
-                            ? e.target.value
-                            : otp
-                        );
-                      }}
-                    />
-                  </div>
+                  <Form.Control
+                    type="number"
+                    placeholder="0000"
+                    className="text-center w-50 mb-2"
+                    value={otp}
+                    onChange={(e) => {
+                      setOtp(
+                        e.target.value.toString().length <= 4
+                          ? e.target.value
+                          : otp
+                      );
+                    }}
+                  />
                 </div>
                 <div className="card-2">
                   <div className="content d-flex justify-content-center align-items-center">
