@@ -18,6 +18,7 @@ export default function Home() {
         <Image
           src="/car-gray-2.jpg"
           layout="fill"
+          objectFit="cover"
           style={{ filter: "blur(2px)" }}
           alt="background-image"
         />
