@@ -10,18 +10,21 @@ import Image from "next/image";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useEffect, useState } from "react";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
 
 const CarTypes = ["Sedan", "SUV", "Van", "Magic"];
 
 export default function Home() {
-  const [pickup, setPickup] = useState("");
-  const [destination, setDestination] = useState("");
+  const [pickup, setPickup] = useState("Kharagpur, India");
+  const [destination, setDestination] = useState("Kolkata, India");
   const [pickupTime, setPickupTime] = useState("");
   const [pickupDate, setPickupDate] = useState("");
   const [noofPersons, setNoofPersons] = useState(1);
   const [carType, setCarType] = useState("Sedan");
-  const [emailId, setEmailId] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
+  const [emailId, setEmailId] = useState("g@gmail.com");
+  const [mobileNumber, setMobileNumber] = useState("1234567891");
+
   const [d, setD] = useState(new Date());
 
   const [modalShow, setModalShow] = useState(false);
@@ -38,10 +41,12 @@ export default function Home() {
   }, [d]);
 
   function MyVerticallyCenteredModal(props) {
+    const [otp, setOtp] = useState("");
+    const [otpVerified, setOtpVerified] = useState(false);
+
     return (
       <Modal
         {...props}
-        size="sm"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -52,43 +57,109 @@ export default function Home() {
         </Modal.Header>
         <Modal.Body>
           <div className="text-center">
-            <Image src="/loading-loading-forever.gif" width={50} height={50} />
-            <Image src="/green-checkmark.png" width={50} height={50} />
             <div className="d-flex flex-row align-items-center justify-content-center lh-sm">
-              <p className="fw-bold fst-italic m-0">Pickup: </p>
-              <p className="text-muted ms-1 m-0">{pickup}</p>
+              <Form
+                className="card p-2 text-center"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setOtpVerified(true);
+                }}
+              >
+                <h6 className="text-danger">
+                  Please enter the one time password <br /> to verify your
+                  account
+                </h6>
+                <div>
+                  <span>A code has been sent to{"  "}</span>
+                  <small>*******{mobileNumber % 10000}</small>
+                </div>
+                <div
+                  id="otp"
+                  className="inputs d-flex flex-row justify-content-center mt-2"
+                >
+                  <div className="mb-3 ">
+                    <Form.Control
+                      type="number"
+                      placeholder="0000"
+                      className="text-center"
+                      autoFocus
+                      value={otp}
+                      onChange={(e) => {
+                        setOtp(
+                          e.target.value.toString().length <= 4
+                            ? e.target.value
+                            : otp
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="card-2">
+                  <div className="content d-flex justify-content-center align-items-center">
+                    <span>Didn't get the code</span>
+                    <a href="#" className="text-decoration-none ms-3">
+                      Resend(1/3)
+                    </a>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <button className="btn btn-danger px-4 validate">
+                    Validate
+                  </button>
+                </div>
+              </Form>
             </div>
-            <div className="d-flex flex-row align-items-center justify-content-center">
-              <p className="fw-bold fst-italic m-0">Destination: </p>
-              <p className="text-muted ms-1 m-0">{destination}</p>
-            </div>
-            <div className="d-flex flex-row align-items-center justify-content-center">
-              <p className="fw-bold fst-italic m-0">pickupTime: </p>
-              <p className="text-muted ms-1 m-0">
-                {pickupTime}__
-                {pickupDate}
-              </p>
-            </div>
-            <div className="d-flex flex-row align-items-center justify-content-center">
-              <p className="fw-bold fst-italic m-0">number of Persons: </p>
-              <p className="text-muted ms-1 m-0">{noofPersons}</p>
-            </div>
-            <div className="d-flex flex-row align-items-center justify-content-center">
-              <p className="fw-bold fst-italic m-0">Car Type: </p>
-              <p className="text-muted ms-1 m-0">{carType}</p>
-            </div>
-            <div className="d-flex flex-row align-items-center justify-content-center">
-              <p className="fw-bold fst-italic m-0">Email Id: </p>
-              <p className="text-muted ms-1 m-0">{emailId}</p>
-            </div>
-            <div className="d-flex flex-row align-items-center justify-content-center">
-              <p className="fw-bold fst-italic m-0">Mobile Number: </p>
-              <p className="text-muted ms-1 m-0">{mobileNumber}</p>
+            <Image
+              src={
+                otpVerified
+                  ? "/green-checkmark.png"
+                  : "/loading-loading-forever.gif"
+              }
+              width={50}
+              height={50}
+            />
+            <div className="d-flex flex-row align-items-center justify-content-center lh-sm">
+              <div className="card p-2 text-center lh-sm">
+                <div className="d-flex flex-row align-items-center justify-content-center">
+                  <p className="fw-bold fst-italic m-0">Pickup: </p>
+                  <p className="text-muted ms-1 m-0">{pickup}</p>
+                </div>
+                <div className="d-flex flex-row align-items-center justify-content-center">
+                  <p className="fw-bold fst-italic m-0">Destination: </p>
+                  <p className="text-muted ms-1 m-0">{destination}</p>
+                </div>
+                <div className="d-flex flex-row align-items-center justify-content-center">
+                  <p className="fw-bold fst-italic m-0">pickupTime: </p>
+                  <p className="text-muted ms-1 m-0">
+                    {pickupTime}__
+                    {pickupDate}
+                  </p>
+                </div>
+                <div className="d-flex flex-row align-items-center justify-content-center">
+                  <p className="fw-bold fst-italic m-0">number of Person: </p>
+                  <p className="text-muted ms-1 m-0">{noofPersons}</p>
+                </div>
+                <div className="d-flex flex-row align-items-center justify-content-center">
+                  <p className="fw-bold fst-italic m-0">Car Type: </p>
+                  <p className="text-muted ms-1 m-0">{carType}</p>
+                </div>
+                <div className="d-flex flex-row align-items-center justify-content-center">
+                  <p className="fw-bold fst-italic m-0">Email Id: </p>
+                  <p className="text-muted ms-1 m-0">{emailId}</p>
+                </div>
+                <div className="d-flex flex-row align-items-center justify-content-center">
+                  <p className="fw-bold fst-italic m-0">Mobile Number: </p>
+                  <p className="text-muted ms-1 m-0">{mobileNumber}</p>
+                </div>
+              </div>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Edit Booking</Button>
+          <Button onClick={props.onHide} disabled={!otpVerified}>
+            Conform Booking
+          </Button>
         </Modal.Footer>
       </Modal>
     );
@@ -115,14 +186,14 @@ export default function Home() {
             <Image
               src="/carbuk_logo.png"
               layout="fixed"
-              width={70}
+              width={80}
               height={40}
               alt="logo"
               style={{ background: "black" }}
             />
-            <h1 className="text-white">Welcome to Carbuk</h1>
+            <h1 className="text-white user-select-none">Welcome to Carbuk</h1>
           </div>
-          <form
+          <Form
             onSubmit={(e) => {
               e.preventDefault();
               setD(new Date());
@@ -130,80 +201,86 @@ export default function Home() {
             }}
           >
             <div className="mb-3 d-flex flex-row">
-              <div className="form-floating mb-3 w-50">
-                <input
+              <FloatingLabel
+                controlId="pickupInput"
+                label="Enter Pickup Location"
+                className="w-50"
+              >
+                <Form.Control
                   type="text"
-                  className={`form-control bg-gradient ${
-                    !pickup ? "bg-secondary" : "bg-light"
-                  }`}
-                  id="pickupInput"
-                  placeholder="Kharagpur"
+                  placeholder="kgp"
                   value={pickup}
                   onChange={(e) => setPickup(e.target.value)}
-                  required
+                  className={`bg-gradient ${!pickup && "bg-secondary"}`}
                 />
-                <label htmlFor="pickupInput">Enter Pickup Location</label>
-              </div>
-              <div className="form-floating mb-3 w-50">
-                <input
+              </FloatingLabel>
+
+              <FloatingLabel
+                controlId="destinationInput"
+                label="Enter Destination"
+                className="w-50"
+              >
+                <Form.Control
                   type="text"
-                  className={`form-control bg-gradient ${
-                    !destination ? "bg-secondary" : "bg-light"
-                  }`}
-                  id="destinationInput"
-                  placeholder="Kolkata"
+                  placeholder="kolkata"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  required
+                  className={`bg-gradient ${!destination && "bg-secondary"}`}
                 />
-                <label htmlFor="destinationInput">Enter Destination</label>
-              </div>
+              </FloatingLabel>
             </div>
             <div className="mb-3 d-flex flex-row">
-              <div className="form-floating w-50">
-                <input
+              <FloatingLabel
+                controlId="pickupTimeInput"
+                label="Select Pickup Time"
+                className="w-50"
+              >
+                <Form.Control
                   type="time"
-                  className={`form-control bg-gradient ${
-                    !pickupTime ? "bg-secondary" : "bg-light"
-                  }`}
-                  id="pickupTimeInput"
-                  placeholder="13:21"
                   value={pickupTime}
                   onChange={(e) => setPickupTime(e.target.value)}
                   required
-                />
-                <label htmlFor="pickupTimeInput">Select Pickup Time</label>
-              </div>
-              <div className="form-floating w-50">
-                <input
-                  type="date"
-                  className={`form-control bg-gradient ${
-                    !pickupDate ? "bg-secondary" : "bg-light"
+                  className={`bg-gradient ${
+                    !pickupTime ? "bg-secondary" : "bg-light"
                   }`}
-                  id="pickupDateInput"
-                  placeholder="2022-01-01"
+                />
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="pickupDateInput"
+                label="Select pickup Date"
+                className="w-50"
+              >
+                <Form.Control
+                  type="date"
                   value={pickupDate}
                   onChange={(e) => setPickupDate(e.target.value)}
                   required
+                  className={`bg-gradient ${
+                    !pickupDate ? "bg-secondary" : "bg-light"
+                  }`}
                 />
-                <label htmlFor="pickupDateInput">Select Pickup Date</label>
-              </div>
+              </FloatingLabel>
             </div>
-            <div className="mb-3">
-              <label
-                htmlFor="exampleInputPassword1"
-                className="form-label text-white"
-              >
+
+            <div className="mb-3 d-flex">
+              <div className="text-white me-2 user-select-none">
                 Select number of persons
-              </label>
+              </div>
               <button
                 type="button"
-                className="btn btn-secondary bg-gradient btn-sm ms-4 px-3"
+                className="btn btn-danger btn-circle btn-sm bg-gradient"
                 onClick={() =>
                   setNoofPersons(noofPersons > 1 ? noofPersons - 1 : 1)
                 }
               >
-                -
+                <h2
+                  style={{
+                    position: "relative",
+                    top: "-14px",
+                  }}
+                >
+                  -
+                </h2>
               </button>
               <button
                 type="button"
@@ -213,18 +290,23 @@ export default function Home() {
               </button>
               <button
                 type="button"
-                className="btn btn-secondary bg-gradient btn-sm px-3"
+                className="btn btn-success btn-circle btn-sm bg-gradient"
                 onClick={() =>
                   setNoofPersons(noofPersons <= 50 ? noofPersons + 1 : 50)
                 }
               >
-                +
+                <h4
+                  style={{
+                    position: "relative",
+                    top: "-8px",
+                  }}
+                >
+                  +
+                </h4>
               </button>
             </div>
-            <div className="mb-3">
-              <label htmlFor="carType" className="form-label text-white me-2">
-                Car Type
-              </label>
+            <div className="mb-3 d-flex">
+              <div className="text-white me-2 user-select-none">Car Type</div>
               {CarTypes.map((carName, index) => (
                 <button
                   type="button"
@@ -238,58 +320,62 @@ export default function Home() {
                 </button>
               ))}
             </div>
-            <div className="form-floating mb-3">
-              <input
+
+            <FloatingLabel
+              controlId="carNameInput"
+              label="Type Car Name for any Specific Type(Optional)"
+              className="mb-2"
+            >
+              <Form.Control
                 type="text"
-                className={`form-control bg-gradient ${
+                placeholder="Password"
+                value={CarTypes.includes(carType) ? "" : carType}
+                onChange={(e) => setCarType(e.target.value)}
+                className={`bg-gradient ${
                   (CarTypes.includes(carType) || carType === "") &&
                   "bg-secondary"
                 }`}
-                id="carNameInput"
-                placeholder="carName"
-                value={CarTypes.includes(carType) ? "" : carType}
-                onChange={(e) => setCarType(e.target.value)}
               />
-              <label htmlFor="carNameInput">
-                Type Car Name for any Specific Type(Optional)
-              </label>
-            </div>
-            <div className="form-floating mb-3">
-              <input
+            </FloatingLabel>
+
+            <FloatingLabel
+              controlId="emailInput"
+              label="Enter Email Id"
+              className="mb-2"
+            >
+              <Form.Control
                 type="email"
-                className={`form-control bg-gradient ${
-                  !emailId ? "bg-secondary" : "bg-light"
-                }`}
-                id="emailInput"
                 placeholder="name@example.com"
                 value={emailId}
                 onChange={(e) => setEmailId(e.target.value)}
-                required
+                className={`bg-gradient ${!emailId && "bg-secondary"}`}
               />
-              <label htmlFor="emailInput">Your email id is:</label>
-            </div>
-            <div className="form-floating mb-3">
-              <input
+            </FloatingLabel>
+
+            <FloatingLabel controlId="mobileInput" label="Enter Mobile Number">
+              <Form.Control
                 type="number"
-                className={`form-control bg-gradient ${
-                  !mobileNumber ? "bg-secondary" : "bg-light"
-                }`}
-                id="mobileInput"
                 placeholder="0000-000-000"
                 value={mobileNumber}
-                onChange={(e) => setMobileNumber(e.target.value)}
                 required
+                onChange={(e) =>
+                  setMobileNumber(
+                    e.target.value.toString().length <= 10
+                      ? e.target.value
+                      : mobileNumber
+                  )
+                }
+                className={`bg-gradient ${!mobileNumber && "bg-secondary"}`}
               />
-              <label htmlFor="mobileInput">Mobile number</label>
-              <div className="text-center small text-muted">
-                (We will send OTP to the mobile number)
-              </div>
+            </FloatingLabel>
+            <div className="text-center small text-muted mb-3">
+              (We will send OTP to the mobile number)
             </div>
 
             <button className="w-100 btn btn-primary" type="submit">
               verify OTP
             </button>
-          </form>
+          </Form>
         </div>
       </main>
     </div>
