@@ -21,7 +21,7 @@ export default function Home() {
   const [noofPersons, setNoofPersons] = useState(1);
   const [carType, setCarType] = useState("Sedan");
   const [emailId, setEmailId] = useState("");
-  const [mobileNumber, setMobileNumber] = useState(null);
+  const [mobileNumber, setMobileNumber] = useState("");
 
   const [modalShow, setModalShow] = useState(false);
   const count = useSelector(selectValue);
@@ -112,7 +112,12 @@ export default function Home() {
             />
             <h1 className="text-white">Welcome to Carbuk</h1>
           </div>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setModalShow(true);
+            }}
+          >
             <div className="mb-3 d-flex flex-row">
               <div className="form-floating mb-3 w-50">
                 <input
@@ -122,6 +127,7 @@ export default function Home() {
                   placeholder="Kharagpur"
                   value={pickup}
                   onChange={(e) => setPickup(e.target.value)}
+                  required
                 />
                 <label htmlFor="pickupInput">Enter Pickup Location</label>
               </div>
@@ -133,6 +139,7 @@ export default function Home() {
                   placeholder="Kolkata"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
+                  required
                 />
                 <label htmlFor="destinationInput">Enter Destination</label>
               </div>
@@ -146,6 +153,7 @@ export default function Home() {
                   placeholder="13:21"
                   value={pickupTime}
                   onChange={(e) => setPickupTime(e.target.value)}
+                  required
                 />
                 <label htmlFor="pickupTimeInput">Select Pickup Time</label>
               </div>
@@ -157,6 +165,7 @@ export default function Home() {
                   placeholder="2022-01-01"
                   value={pickupDate}
                   onChange={(e) => setPickupDate(e.target.value)}
+                  required
                 />
                 <label htmlFor="pickupDateInput">Select Pickup Date</label>
               </div>
@@ -219,7 +228,7 @@ export default function Home() {
                 onChange={(e) => setCarType(e.target.value)}
               />
               <label htmlFor="carNameInput">
-                Type Car Name for any Specific Type
+                Type Car Name for any Specific Type(Optional)
               </label>
             </div>
             <div className="form-floating mb-3">
@@ -230,6 +239,7 @@ export default function Home() {
                 placeholder="name@example.com"
                 value={emailId}
                 onChange={(e) => setEmailId(e.target.value)}
+                required
               />
               <label htmlFor="emailInput">Your email id is:</label>
             </div>
@@ -241,23 +251,17 @@ export default function Home() {
                 placeholder="0000-000-000"
                 value={mobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value)}
+                required
               />
               <label htmlFor="mobileInput">Mobile number</label>
               <div className="text-center small text-muted">
                 (We will send OTP to the mobile number)
               </div>
             </div>
-            <Button
-              type="submit"
-              className="w-100"
-              variant="primary"
-              onClick={(e) => {
-                e.preventDefault();
-                setModalShow(true);
-              }}
-            >
+
+            <button className="w-100 btn btn-primary" type="submit">
               verify OTP
-            </Button>
+            </button>
           </form>
         </div>
       </main>
