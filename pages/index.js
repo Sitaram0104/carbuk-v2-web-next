@@ -9,7 +9,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const CarTypes = ["Sedan", "SUV", "Van", "Magic"];
 
@@ -22,10 +22,20 @@ export default function Home() {
   const [carType, setCarType] = useState("Sedan");
   const [emailId, setEmailId] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [d, setD] = useState(new Date());
 
   const [modalShow, setModalShow] = useState(false);
   const count = useSelector(selectValue);
   const dispatch = useDispatch();
+
+  const pad = (p) => (p < 10 ? "0" : "") + p;
+
+  useEffect(() => {
+    setPickupTime(`${pad(d.getHours())}:${pad(d.getMinutes())}`);
+    setPickupDate(
+      `${pad(d.getFullYear())}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+    );
+  }, [d]);
 
   function MyVerticallyCenteredModal(props) {
     return (
@@ -55,7 +65,7 @@ export default function Home() {
             <div className="d-flex flex-row align-items-center justify-content-center">
               <p className="fw-bold fst-italic m-0">pickupTime: </p>
               <p className="text-muted ms-1 m-0">
-                {pickupTime}
+                {pickupTime}__
                 {pickupDate}
               </p>
             </div>
@@ -115,6 +125,7 @@ export default function Home() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              setD(new Date());
               setModalShow(true);
             }}
           >
@@ -122,7 +133,9 @@ export default function Home() {
               <div className="form-floating mb-3 w-50">
                 <input
                   type="text"
-                  className={`form-control ${!pickup && "bg-secondary"}`}
+                  className={`form-control bg-gradient ${
+                    !pickup ? "bg-secondary" : "bg-light"
+                  }`}
                   id="pickupInput"
                   placeholder="Kharagpur"
                   value={pickup}
@@ -134,7 +147,9 @@ export default function Home() {
               <div className="form-floating mb-3 w-50">
                 <input
                   type="text"
-                  className={`form-control ${!destination && "bg-secondary"}`}
+                  className={`form-control bg-gradient ${
+                    !destination ? "bg-secondary" : "bg-light"
+                  }`}
                   id="destinationInput"
                   placeholder="Kolkata"
                   value={destination}
@@ -148,7 +163,9 @@ export default function Home() {
               <div className="form-floating w-50">
                 <input
                   type="time"
-                  className={`form-control ${!pickupTime && "bg-secondary"}`}
+                  className={`form-control bg-gradient ${
+                    !pickupTime ? "bg-secondary" : "bg-light"
+                  }`}
                   id="pickupTimeInput"
                   placeholder="13:21"
                   value={pickupTime}
@@ -160,7 +177,9 @@ export default function Home() {
               <div className="form-floating w-50">
                 <input
                   type="date"
-                  className={`form-control ${!pickupDate && "bg-secondary"}`}
+                  className={`form-control bg-gradient ${
+                    !pickupDate ? "bg-secondary" : "bg-light"
+                  }`}
                   id="pickupDateInput"
                   placeholder="2022-01-01"
                   value={pickupDate}
@@ -179,21 +198,25 @@ export default function Home() {
               </label>
               <button
                 type="button"
-                className="btn btn-secondary btn-sm ms-4 px-3"
-                onClick={() => setNoofPersons(noofPersons - 1)}
+                className="btn btn-secondary bg-gradient btn-sm ms-4 px-3"
+                onClick={() =>
+                  setNoofPersons(noofPersons > 1 ? noofPersons - 1 : 1)
+                }
               >
                 -
               </button>
               <button
                 type="button"
-                className="btn btn-primary btn-sm px-4 mx-1"
+                className="btn btn-primary bg-gradient btn-sm px-4 mx-1"
               >
                 {noofPersons}
               </button>
               <button
                 type="button"
-                className="btn btn-secondary btn-sm px-3"
-                onClick={() => setNoofPersons(noofPersons + 1)}
+                className="btn btn-secondary bg-gradient btn-sm px-3"
+                onClick={() =>
+                  setNoofPersons(noofPersons <= 50 ? noofPersons + 1 : 50)
+                }
               >
                 +
               </button>
@@ -205,7 +228,7 @@ export default function Home() {
               {CarTypes.map((carName, index) => (
                 <button
                   type="button"
-                  className={`btn btn-sm ms-1 px-3 ${
+                  className={`btn btn-sm bg-gradient ms-1 px-3 ${
                     carName === carType ? "btn-primary" : "btn-secondary"
                   }`}
                   key={index}
@@ -218,7 +241,7 @@ export default function Home() {
             <div className="form-floating mb-3">
               <input
                 type="text"
-                className={`form-control ${
+                className={`form-control bg-gradient ${
                   (CarTypes.includes(carType) || carType === "") &&
                   "bg-secondary"
                 }`}
@@ -234,7 +257,9 @@ export default function Home() {
             <div className="form-floating mb-3">
               <input
                 type="email"
-                className={`form-control ${!emailId && "bg-secondary"}`}
+                className={`form-control bg-gradient ${
+                  !emailId ? "bg-secondary" : "bg-light"
+                }`}
                 id="emailInput"
                 placeholder="name@example.com"
                 value={emailId}
@@ -246,7 +271,9 @@ export default function Home() {
             <div className="form-floating mb-3">
               <input
                 type="number"
-                className={`form-control ${!mobileNumber && "bg-secondary"}`}
+                className={`form-control bg-gradient ${
+                  !mobileNumber ? "bg-secondary" : "bg-light"
+                }`}
                 id="mobileInput"
                 placeholder="0000-000-000"
                 value={mobileNumber}
