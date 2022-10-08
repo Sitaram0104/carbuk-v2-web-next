@@ -7,14 +7,22 @@ import {
 } from "../store/slices/counterSlice";
 import Head from "next/head";
 import Image from "next/image";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { useState } from "react";
 
 export default function Home() {
+  const [modalShow, setModalShow] = useState(false);
   const count = useSelector(selectValue);
   const dispatch = useDispatch();
 
   return (
     <div className="min-vh-100 d-flex align-items-center justify-content-center flex-column">
       <main>
+        <MyVerticallyCenteredModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
         <Image
           src="/car-gray-2.jpg"
           layout="fill"
@@ -39,21 +47,25 @@ export default function Home() {
             <div className="mb-3 d-flex flex-row">
               <div className="form-floating w-50">
                 <select className="form-select" id="floatingSelectGrid">
-                  <option selected>Open this select menu</option>
+                  <option defaultValue="11">Open this select menu</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
-                <label for="floatingSelectGrid">Select Pickup Location</label>
+                <label htmlFor="floatingSelectGrid">
+                  Select Pickup Location
+                </label>
               </div>
               <div className="form-floating w-50">
                 <select className="form-select" id="floatingSelectGrid">
-                  <option selected>Open this select menu</option>
+                  <option defaultValue="11">Open this select menu</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
-                <label for="floatingSelectGrid">Select Dropoff Location</label>
+                <label htmlFor="floatingSelectGrid">
+                  Select Dropoff Location
+                </label>
               </div>
             </div>
             <div className="mb-3 d-flex flex-row">
@@ -65,7 +77,7 @@ export default function Home() {
                   placeholder="name@example.com"
                   value="13:21"
                 />
-                <label for="floatingInput">Select Pickup Time</label>
+                <label htmlFor="floatingInput">Select Pickup Time</label>
               </div>
               <div className="form-floating w-50">
                 <input
@@ -75,12 +87,12 @@ export default function Home() {
                   placeholder="name@example.com"
                   value="2022-09-08"
                 />
-                <label for="floatingInput">Select Pickup Date</label>
+                <label htmlFor="floatingInput">Select Pickup Date</label>
               </div>
             </div>
             <div className="mb-3">
               <label
-                for="exampleInputPassword1"
+                htmlFor="exampleInputPassword1"
                 className="form-label text-white"
               >
                 Select number of persons
@@ -103,7 +115,7 @@ export default function Home() {
             </div>
             <div className="mb-3">
               <label
-                for="exampleInputPassword1"
+                htmlFor="exampleInputPassword1"
                 className="form-label text-white"
               >
                 Car Type
@@ -137,7 +149,7 @@ export default function Home() {
                 id="floatingInput"
                 placeholder="name@example.com"
               />
-              <label for="floatingInput">
+              <label htmlFor="floatingInput">
                 Type Car Name for any Specific Type
               </label>
             </div>
@@ -148,7 +160,7 @@ export default function Home() {
                 id="floatingInput"
                 placeholder="name@example.com"
               />
-              <label for="floatingInput">Your email id is:</label>
+              <label htmlFor="floatingInput">Your email id is:</label>
             </div>
             <div className="form-floating mb-3">
               <input
@@ -157,17 +169,43 @@ export default function Home() {
                 id="floatingInput"
                 placeholder="name@example.com"
               />
-              <label for="floatingInput">Mobile number</label>
-              <div class="text-center small text-muted">
+              <label htmlFor="floatingInput">Mobile number</label>
+              <div className="text-center small text-muted">
                 (We will send OTP to the mobile number)
               </div>
             </div>
-            <button type="submit" className="btn btn-primary w-100">
-              Submit
-            </button>
+            <Button variant="primary" onClick={() => setModalShow(true)}>
+              verify OTP
+            </Button>
           </form>
         </div>
       </main>
     </div>
+  );
+}
+
+function MyVerticallyCenteredModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="sm"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          verifying OTP
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="text-center">
+          <Image src="/loading-loading-forever.gif" width={50} height={50} />
+          <Image src="/green-checkmark.png" width={50} height={50} />
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
