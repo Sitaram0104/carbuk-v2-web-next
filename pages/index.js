@@ -52,7 +52,7 @@ export default function Home() {
                   id="floatingInput"
                   placeholder="name@example.com"
                 />
-                <label htmlFor="floatingInput">Select Pickup Location</label>
+                <label htmlFor="floatingInput">Enter Pickup Location</label>
               </div>
               <div className="form-floating mb-3 w-50">
                 <input
@@ -61,7 +61,7 @@ export default function Home() {
                   id="floatingInput"
                   placeholder="name@example.com"
                 />
-                <label htmlFor="floatingInput">Select Dropoff Location</label>
+                <label htmlFor="floatingInput">Enter Dropoff Location</label>
               </div>
             </div>
             <div className="mb-3 d-flex flex-row">
