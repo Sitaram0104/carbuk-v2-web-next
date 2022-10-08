@@ -97,13 +97,16 @@ export default function Home() {
                 <div className="card-2">
                   <div className="content d-flex justify-content-center align-items-center">
                     <span>Didn't get the code</span>
-                    <a href="#" className="text-decoration-none ms-3">
+                    <button className="text-decoration-none ms-3">
                       Resend(1/3)
-                    </a>
+                    </button>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <button className="btn btn-danger px-4 validate">
+                  <button
+                    type="submit"
+                    className="btn btn-danger px-4 validate"
+                  >
                     Validate
                   </button>
                 </div>
@@ -117,6 +120,7 @@ export default function Home() {
               }
               width={50}
               height={50}
+              alt="loading"
             />
             <div className="d-flex flex-row align-items-center justify-content-center lh-sm">
               <div className="card p-2 text-center lh-sm">
