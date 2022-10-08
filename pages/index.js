@@ -61,7 +61,7 @@ export default function Home() {
                   id="floatingInput"
                   placeholder="name@example.com"
                 />
-                <label htmlFor="floatingInput">Enter Dropoff Location</label>
+                <label htmlFor="floatingInput">Enter Destination</label>
               </div>
             </div>
             <div className="mb-3 d-flex flex-row">
