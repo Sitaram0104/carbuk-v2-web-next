@@ -52,7 +52,7 @@ export default function Home() {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            verifying OTP
+            {otpVerified ? "OTP Verified" : "verifying OTP"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
