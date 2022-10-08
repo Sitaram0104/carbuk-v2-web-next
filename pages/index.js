@@ -99,7 +99,7 @@ export default function Home() {
             </label>
             <button
               type="button"
-              className="btn btn-secondary btn-sm ms-4 px-4"
+              className="btn btn-secondary btn-sm ms-2 px-4"
             >
               Sedan
             </button>
