@@ -190,10 +190,7 @@ export default function Home() {
               </button>
             </div>
             <div className="mb-3">
-              <label
-                htmlFor="exampleInputPassword1"
-                className="form-label text-white me-2"
-              >
+              <label htmlFor="carType" className="form-label text-white me-2">
                 Car Type
               </label>
               {CarTypes.map((carName, index) => (
