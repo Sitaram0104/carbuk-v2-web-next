@@ -174,7 +174,11 @@ export default function Home() {
                 (We will send OTP to the mobile number)
               </div>
             </div>
-            <Button variant="primary" onClick={() => setModalShow(true)}>
+            <Button
+              className="w-100"
+              variant="primary"
+              onClick={() => setModalShow(true)}
+            >
               verify OTP
             </Button>
           </form>
