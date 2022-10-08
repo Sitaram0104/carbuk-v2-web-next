@@ -45,27 +45,23 @@ export default function Home() {
           </div>
           <form>
             <div className="mb-3 d-flex flex-row">
-              <div className="form-floating w-50">
-                <select className="form-select" id="floatingSelectGrid">
-                  <option defaultValue="11">Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-                <label htmlFor="floatingSelectGrid">
-                  Select Pickup Location
-                </label>
+              <div className="form-floating mb-3 w-50">
+                <input
+                  type="search"
+                  className="form-control"
+                  id="floatingInput"
+                  placeholder="name@example.com"
+                />
+                <label htmlFor="floatingInput">Select Pickup Location</label>
               </div>
-              <div className="form-floating w-50">
-                <select className="form-select" id="floatingSelectGrid">
-                  <option defaultValue="11">Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-                <label htmlFor="floatingSelectGrid">
-                  Select Dropoff Location
-                </label>
+              <div className="form-floating mb-3 w-50">
+                <input
+                  type="search"
+                  className="form-control"
+                  id="floatingInput"
+                  placeholder="name@example.com"
+                />
+                <label htmlFor="floatingInput">Select Dropoff Location</label>
               </div>
             </div>
             <div className="mb-3 d-flex flex-row">
