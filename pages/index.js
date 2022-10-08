@@ -66,8 +66,7 @@ export default function Home() {
                 }}
               >
                 <h6 className="text-danger">
-                  Please enter the one time password <br /> to verify your
-                  account
+                  Please enter the one time password <br /> to verify booking
                 </h6>
                 <div>
                   <span>A code has been sent to{"  "}</span>
@@ -183,7 +182,7 @@ export default function Home() {
         <div
           style={{ zIndex: 1, backdropFilter: "blur(14px)", padding: "1rem" }}
         >
-          <div className="mb-3 d-flex flex-row">
+          <div className="mb-3 d-flex align-items-center justify-content-center">
             <Image
               src="/carbuk_logo.png"
               layout="fixed"
@@ -298,7 +297,7 @@ export default function Home() {
                 <h3>+</h3>
               </Button>
             </div>
-            <div className="mb-3 d-flex">
+            <div className="mb-3 d-flex align-items-center justify-content-center">
               <div className="text-white me-2 user-select-none">Car Type</div>
               {CarTypes.map((carName, index) => (
                 <Button
