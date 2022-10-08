@@ -16,6 +16,7 @@ export default function Home() {
     <div className="min-vh-100 d-flex align-items-center justify-content-center flex-column">
       <Head>
         <title>Carbuk</title>
+        <meta property="og:image" content="/carbuk_logo.png" />
       </Head>
       <Image
         src="/car-gray-2.jpg"
