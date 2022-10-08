@@ -17,6 +17,11 @@ export default function Home() {
       <Head>
         <title>Carbuk</title>
         <meta property="og:image" content="/carbuk_logo.png" />
+        <meta property="og:title" content="CARBUK" />
+        <meta
+          property="og:description"
+          content="Use carbuk for booking rides"
+        />
       </Head>
       <Image
         src="/car-gray-2.jpg"
