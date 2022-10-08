@@ -96,8 +96,8 @@ export default function Home() {
                 </div>
                 <div className="card-2">
                   <div className="content d-flex justify-content-center align-items-center">
-                    <span>Didn't get the code</span>
-                    <button className="text-decoration-none ms-3">
+                    <span>Didn&#39;t get the code</span>
+                    <button className="btn btn-outline-danger ms-3">
                       Resend(1/3)
                     </button>
                   </div>
@@ -170,19 +170,19 @@ export default function Home() {
   }
 
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center flex-column">
-      <main>
-        <MyVerticallyCenteredModal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
-        <Image
-          src="/car-gray-2.jpg"
-          layout="fill"
-          objectFit="cover"
-          style={{ filter: "blur(2px)" }}
-          alt="background-image"
-        />
+    <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
+      <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
+      <Image
+        src="/car-gray-2.jpg"
+        layout="fill"
+        objectFit="cover"
+        style={{ filter: "blur(2px)" }}
+        alt="background-image"
+      />
+      <div className="min-vh-100 d-flex align-items-center justify-content-center flex-column">
         <div
           style={{ zIndex: 1, backdropFilter: "blur(14px)", padding: "1rem" }}
         >
@@ -381,7 +381,7 @@ export default function Home() {
             </button>
           </Form>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
