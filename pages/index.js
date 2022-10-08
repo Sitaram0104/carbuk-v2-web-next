@@ -94,18 +94,17 @@ export default function Home() {
                 <div className="card-2">
                   <div className="content d-flex justify-content-center align-items-center">
                     <span>Didn&#39;t get the code</span>
-                    <button className="btn btn-outline-danger ms-3">
-                      Resend(1/3)
-                    </button>
+                    <Button variant="outline-danger ms-3">Resend(1/3)</Button>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <button
+                  <Button
                     type="submit"
-                    className="btn btn-danger px-4 validate"
+                    variant="danger"
+                    className="px-4 validate"
                   >
                     Validate
-                  </button>
+                  </Button>
                 </div>
               </Form>
             </div>
@@ -264,62 +263,54 @@ export default function Home() {
               </FloatingLabel>
             </div>
 
-            <div className="mb-3 d-flex">
+            <div className="mb-3 d-flex align-items-center justify-content-center">
               <div className="text-white me-2 user-select-none">
                 Select number of persons
               </div>
-              <button
+              <Button
                 type="button"
-                className="btn btn-danger btn-circle btn-sm bg-gradient"
+                variant="danger"
+                size="sm"
+                className="btn-circle bg-gradient d-flex align-items-center justify-content-center"
                 onClick={() =>
                   setNoofPersons(noofPersons > 1 ? noofPersons - 1 : 1)
                 }
               >
-                <h4
-                  style={{
-                    position: "relative",
-                    top: "-30%",
-                  }}
-                >
-                  -
-                </h4>
-              </button>
-              <button
+                <h2>-</h2>
+              </Button>
+              <Button
                 type="button"
-                className="btn btn-primary bg-gradient btn-sm px-4 mx-1"
+                variant="primary"
+                size="sm"
+                className="bg-gradient px-4 mx-1"
               >
                 {noofPersons}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
-                className="btn btn-success btn-circle btn-sm bg-gradient"
+                variant="success"
+                size="sm"
+                className="btn-circle bg-gradient d-flex align-items-center justify-content-center"
                 onClick={() =>
                   setNoofPersons(noofPersons <= 50 ? noofPersons + 1 : 50)
                 }
               >
-                <h4
-                  style={{
-                    position: "relative",
-                    top: "-40%",
-                  }}
-                >
-                  +
-                </h4>
-              </button>
+                <h3>+</h3>
+              </Button>
             </div>
             <div className="mb-3 d-flex">
               <div className="text-white me-2 user-select-none">Car Type</div>
               {CarTypes.map((carName, index) => (
-                <button
+                <Button
                   type="button"
-                  className={`btn btn-sm bg-gradient ms-1 px-3 ${
-                    carName === carType ? "btn-primary" : "btn-secondary"
-                  }`}
+                  variant={carName === carType ? "primary" : "secondary"}
+                  size="sm"
+                  className="bg-gradient ms-1 px-3"
                   key={index}
                   onClick={() => setCarType(carName)}
                 >
                   {carName}
-                </button>
+                </Button>
               ))}
             </div>
 
@@ -374,9 +365,9 @@ export default function Home() {
               (We will send OTP to the mobile number)
             </div>
 
-            <button className="w-100 btn btn-primary" type="submit">
+            <Button variant="primary" className="w-100" type="submit">
               verify OTP
-            </button>
+            </Button>
           </Form>
         </div>
       </div>
