@@ -38,6 +38,7 @@ export default function Home() {
   const [mobileNumber, setMobileNumber] = useState("1234567891");
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [register, setRegister] = useState(false);
 
   const [d, setD] = useState(new Date());
 
@@ -180,17 +181,35 @@ export default function Home() {
       </Dialog>
 
       <Dialog open={loginModalShow} onClose={handleClose}>
-        <DialogTitle>Login or Register</DialogTitle>
+        <DialogTitle>{register ? "Register" : "Login"}</DialogTitle>
         <DialogContent>
           <div className="d-flex flex-column align-items-center">
-            <DialogContentText>Login</DialogContentText>
-            <TextField
-              margin="dense"
-              id="name"
-              label="Name"
-              type="text"
-              variant="outlined"
-            />
+            <div className="d-flex mb-1 justify-content-between w-100">
+              <Button
+                variant={`${!register ? "outline-primary" : "primary"}`}
+                onClick={() => setRegister(false)}
+                disabled={!register}
+              >
+                Login
+              </Button>
+              <Button
+                variant={`${register ? "outline-primary" : "primary"}`}
+                onClick={() => setRegister(true)}
+                disabled={register}
+              >
+                Register
+              </Button>
+            </div>
+            <hr className="style1 w-100" />
+            {!register && (
+              <TextField
+                margin="dense"
+                id="name"
+                label="Name"
+                type="text"
+                variant="outlined"
+              />
+            )}
             <TextField
               margin="dense"
               id="mobile"
@@ -228,8 +247,15 @@ export default function Home() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Close</Button>
+          {!register ? (
+            <Button className="w-100" onClick={handleClose}>
+              Login
+            </Button>
+          ) : (
+            <Button className="w-100" onClick={handleClose}>
+              Register
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
 
