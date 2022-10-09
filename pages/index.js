@@ -18,6 +18,8 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import TextField from "@mui/material/TextField";
+import NavBar from "../components/NavBar";
 
 const CarTypes = ["Sedan", "SUV", "Van", "Magic"];
 
@@ -40,13 +42,19 @@ export default function Home() {
   const [d, setD] = useState(new Date());
 
   const [modalShow, setModalShow] = useState(false);
+  const [loginModalShow, setLoginModalShow] = useState(true);
 
   const handleClickOpen = () => {
     setModalShow(true);
   };
 
+  const handleLoginOpen = () => {
+    setLoginModalShow(true);
+  };
+
   const handleClose = () => {
     setModalShow(false);
+    setLoginModalShow(false);
   };
 
   const count = useSelector(selectValue);
@@ -166,8 +174,45 @@ export default function Home() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
+          <Button onClick={handleClose}>Edit Booking</Button>
+          <Button onClick={handleClose}>Confirm Booking</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={loginModalShow} onClose={handleClose}>
+        <DialogTitle>Login or Register</DialogTitle>
+        <DialogContent>
+          <div className="d-flex flex-column align-items-center">
+            <DialogContentText>Login</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Name"
+              type="text"
+              variant="outlined"
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="email"
+              label="Email Address"
+              type="email"
+              variant="outlined"
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="password"
+              label="Password"
+              type="password"
+              variant="outlined"
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
 
@@ -178,21 +223,12 @@ export default function Home() {
         style={{ filter: "blur(2px)" }}
         alt="background-image"
       />
-      <div className="min-vh-100 d-flex align-items-center justify-content-center flex-column">
-        <div
-          style={{ zIndex: 1, backdropFilter: "blur(14px)", padding: "1rem" }}
-        >
-          <div className="mb-3 d-flex align-items-center justify-content-center">
-            <Image
-              src="/carbuk_logo.png"
-              layout="fixed"
-              width={80}
-              height={40}
-              alt="logo"
-              style={{ background: "black" }}
-            />
-            <h2 className="text-white user-select-none">Welcome to Carbuk</h2>
-          </div>
+      <NavBar handleLoginOpen={() => handleLoginOpen()} />
+      <div
+        className="d-flex align-items-center justify-content-center flex-column"
+        style={{ zIndex: 1 }}
+      >
+        <div style={{ backdropFilter: "blur(14px)", padding: "1rem" }}>
           <Form
             onSubmit={(e) => {
               e.preventDefault();
@@ -268,14 +304,14 @@ export default function Home() {
               </div>
               <Button
                 type="button"
-                variant="danger"
+                variant="secondary"
                 size="sm"
-                className="btn-circle bg-gradient d-flex align-items-center justify-content-center"
+                className="bg-gradient d-flex align-items-center justify-content-center"
                 onClick={() =>
                   setNoofPersons(noofPersons > 1 ? noofPersons - 1 : 1)
                 }
               >
-                <RemoveIcon />
+                <RemoveIcon style={{ fontSize: "20px" }} />
               </Button>
               <Button
                 type="button"
@@ -287,14 +323,14 @@ export default function Home() {
               </Button>
               <Button
                 type="button"
-                variant="success"
+                variant="secondary"
                 size="sm"
-                className="btn-circle bg-gradient d-flex align-items-center justify-content-center"
+                className="bg-gradient d-flex align-items-center justify-content-center"
                 onClick={() =>
                   setNoofPersons(noofPersons <= 50 ? noofPersons + 1 : 50)
                 }
               >
-                <AddIcon />
+                <AddIcon style={{ fontSize: "20px" }} />
               </Button>
             </div>
             <div className="mb-3 d-flex align-items-center justify-content-center">
