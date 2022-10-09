@@ -44,7 +44,7 @@ export default function NavBar({ handleLoginOpen }) {
             </Button>
           </Link>
 
-          <Button variant="primary" className="mb-2 me-1">
+          {/* <Button variant="primary" className="mb-2 me-1">
             Admin
           </Button>
           <Button variant="primary" className="mb-2 me-1">
@@ -52,7 +52,7 @@ export default function NavBar({ handleLoginOpen }) {
           </Button>
           <Button variant="primary" className="mb-2 me-1">
             Driver
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import React, { useEffect, useState } from "react";
@@ -13,13 +12,16 @@ import {
 } from "../store/slices/counterSlice";
 import Button from "react-bootstrap/Button";
 import Image from "next/image";
-import Modal from "react-bootstrap/Modal";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import TextField from "@mui/material/TextField";
 import NavBar from "../components/NavBar";
+import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+import db from "../firebaseConfig";
+
+const bookingsRef = collection(db, "bookings");
 
 const CarTypes = ["Sedan", "SUV", "Van", "Magic"];
 
@@ -28,6 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
+  const [name, setName] = useState("");
   const [pickup, setPickup] = useState("Kharagpur, India");
   const [destination, setDestination] = useState("Kolkata, India");
   const [pickupTime, setPickupTime] = useState("");
@@ -44,6 +47,27 @@ export default function Home() {
 
   const [modalShow, setModalShow] = useState(false);
   const [loginModalShow, setLoginModalShow] = useState(true);
+
+  const addBooking = async () => {
+    const bookingNumber = 1;
+    const querySnapshot = await getDocs(bookingsRef);
+    bookingNumber =
+      Math.max(...querySnapshot.docs.map((doc) => doc.data().bookingNumber)) +
+      1;
+
+    await setDoc(doc(bookingsRef), {
+      bookingNumber,
+      carType,
+      destination,
+      emailId,
+      mobileNumber,
+      name,
+      noofPerson: noofPersons,
+      pickup,
+      pickupDate,
+      pickupTime,
+    }).then(() => setModalShow(false));
+  };
 
   const handleClickOpen = () => {
     setModalShow(true);
@@ -141,6 +165,18 @@ export default function Home() {
           <div className="d-flex flex-row align-items-center justify-content-center lh-sm">
             <div className="card p-2 text-center lh-sm">
               <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">Name: </p>
+                <p className="text-muted ms-1 m-0">{name}</p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">Email Id: </p>
+                <p className="text-muted ms-1 m-0">{emailId}</p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">Mobile Number: </p>
+                <p className="text-muted ms-1 m-0">{mobileNumber}</p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
                 <p className="fw-bold fst-italic m-0">Pickup: </p>
                 <p className="text-muted ms-1 m-0">{pickup}</p>
               </div>
@@ -163,20 +199,12 @@ export default function Home() {
                 <p className="fw-bold fst-italic m-0">Car Type: </p>
                 <p className="text-muted ms-1 m-0">{carType}</p>
               </div>
-              <div className="d-flex flex-row align-items-center justify-content-center">
-                <p className="fw-bold fst-italic m-0">Email Id: </p>
-                <p className="text-muted ms-1 m-0">{emailId}</p>
-              </div>
-              <div className="d-flex flex-row align-items-center justify-content-center">
-                <p className="fw-bold fst-italic m-0">Mobile Number: </p>
-                <p className="text-muted ms-1 m-0">{mobileNumber}</p>
-              </div>
             </div>
           </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Edit Booking</Button>
-          <Button onClick={handleClose}>Confirm Booking</Button>
+          <Button onClick={() => addBooking()}>Confirm Booking</Button>
         </DialogActions>
       </Dialog>
 
@@ -208,6 +236,8 @@ export default function Home() {
                 label="Name"
                 type="text"
                 variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             )}
             <TextField

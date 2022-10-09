@@ -10,6 +10,7 @@ body {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 
@@ -24,4 +25,49 @@ input::-webkit-inner-spin-button {
 
 hr.style1{
 	border-top: 1px solid #8c8b8b;
+}
+
+.newItem {
+  max-height: 0;
+  opacity: 0;
+  animation: grow 1s ease-in-out forwards;
+  -webkit-animation: grow 1s ease-in-out forwards;
+}
+
+table {
+  border-collapse: collapse;  
+  width: 100%;
+  color: black;
+}
+
+th, td {
+  text-align: left;
+  padding: 2px 5px;
+  border: 1px solid black;
+}
+
+td{color:white}
+
+thead{background-color: rgba(8, 10, 134, 1);}
+
+tr:nth-child(odd) {
+  background-color: rgba(113, 115, 192, 0.5);
+}
+tr:nth-child(even) {
+  background-color: rgba(68, 56, 173, 0.5);
+}
+
+tr:hover {background-color: coral;}
+
+@-webkit-keyframes grow {
+  to {
+    max-height: 20px;
+    opacity: 1;
+  }
+}
+@keyframes grow {
+  to {
+    max-height: 20px;
+    opacity: 1;
+  }
 }
