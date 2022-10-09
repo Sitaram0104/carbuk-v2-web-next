@@ -30,7 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
-  const [name, setName] = useState("");
+  const [name, setName] = useState("ABCD");
   const [pickup, setPickup] = useState("Kharagpur, India");
   const [destination, setDestination] = useState("Kolkata, India");
   const [pickupTime, setPickupTime] = useState("");
@@ -50,23 +50,59 @@ export default function Home() {
 
   const addBooking = async () => {
     const bookingNumber = 1;
-    const querySnapshot = await getDocs(bookingsRef);
-    bookingNumber =
-      Math.max(...querySnapshot.docs.map((doc) => doc.data().bookingNumber)) +
-      1;
+    if (
+      carType &&
+      destination &&
+      emailId &&
+      mobileNumber &&
+      name &&
+      noofPersons &&
+      pickup &&
+      pickupDate &&
+      pickupTime
+    ) {
+      const querySnapshot = await getDocs(bookingsRef);
+      bookingNumber =
+        Math.max(...querySnapshot.docs.map((doc) => doc.data().bookingNumber)) +
+        1;
 
-    await setDoc(doc(bookingsRef), {
-      bookingNumber,
-      carType,
-      destination,
-      emailId,
-      mobileNumber,
-      name,
-      noofPerson: noofPersons,
-      pickup,
-      pickupDate,
-      pickupTime,
-    }).then(() => setModalShow(false));
+      await setDoc(doc(bookingsRef), {
+        bookingNumber,
+        carType,
+        destination,
+        emailId,
+        mobileNumber,
+        name,
+        noofPerson: noofPersons,
+        pickup,
+        pickupDate,
+        pickupTime,
+      }).then(() => setModalShow(false));
+    } else {
+      alert(
+        `${
+          !carType
+            ? "Car Type"
+            : !destination
+            ? "Destination"
+            : !emailId
+            ? "Email Id"
+            : !mobileNumber
+            ? "Mobile Number"
+            : !name
+            ? "Name"
+            : !noofPersons
+            ? "No of Persons"
+            : !pickup
+            ? "Pickup"
+            : !pickupDate
+            ? "pickupDate"
+            : !pickupTime
+            ? "pickupTime"
+            : "all"
+        } field is empty`
+      );
+    }
   };
 
   const handleClickOpen = () => {
