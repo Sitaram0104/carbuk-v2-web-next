@@ -79,6 +79,7 @@ export default function Home() {
         pickup,
         pickupDate,
         pickupTime,
+        servedBy: "ABCD",
       }).then(() => setModalShow(false));
     } else {
       alert(
