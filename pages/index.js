@@ -1,19 +1,29 @@
-import Link from "next/link";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   decrement,
   increment,
   selectValue,
 } from "../store/slices/counterSlice";
-import Head from "next/head";
-import Image from "next/image";
 import Button from "react-bootstrap/Button";
+import Image from "next/image";
 import Modal from "react-bootstrap/Modal";
-import { useEffect, useState } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 
 const CarTypes = ["Sedan", "SUV", "Van", "Magic"];
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function Home() {
   const [pickup, setPickup] = useState("Kharagpur, India");
@@ -24,10 +34,21 @@ export default function Home() {
   const [carType, setCarType] = useState("Sedan");
   const [emailId, setEmailId] = useState("g@gmail.com");
   const [mobileNumber, setMobileNumber] = useState("1234567891");
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
 
   const [d, setD] = useState(new Date());
 
   const [modalShow, setModalShow] = useState(false);
+
+  const handleClickOpen = () => {
+    setModalShow(true);
+  };
+
+  const handleClose = () => {
+    setModalShow(false);
+  };
+
   const count = useSelector(selectValue);
   const dispatch = useDispatch();
 
@@ -40,73 +61,62 @@ export default function Home() {
     );
   }, [d]);
 
-  function MyVerticallyCenteredModal(props) {
-    const [otp, setOtp] = useState("");
-    const [otpVerified, setOtpVerified] = useState(false);
-
-    return (
-      <Modal
-        {...props}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
+  return (
+    <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
+      <Dialog
+        open={modalShow}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            {otpVerified ? "OTP Verified" : "verifying OTP"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="text-center">
-            <div className="d-flex flex-row align-items-center justify-content-center lh-sm">
-              <Form
-                className="card p-2 text-center"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setOtpVerified(true);
-                }}
-              >
-                <h6 className="text-danger">
-                  Please enter the one time password <br /> to verify booking
-                </h6>
-                <div>
-                  <span>A code has been sent to{"  "}</span>
-                  <small>*******{mobileNumber % 10000}</small>
-                </div>
-                <div
-                  id="otp"
-                  className="inputs d-flex flex-row justify-content-center mt-2"
-                >
-                  <Form.Control
-                    type="number"
-                    placeholder="0000"
-                    className="text-center w-50 mb-2"
-                    value={otp}
-                    onChange={(e) => {
-                      setOtp(
-                        e.target.value.toString().length <= 4
-                          ? e.target.value
-                          : otp
-                      );
-                    }}
-                  />
-                </div>
-                <div className="card-2">
-                  <div className="content d-flex justify-content-center align-items-center">
-                    <span>Didn&#39;t get the code</span>
-                    <Button variant="outline-danger ms-3">Resend(1/3)</Button>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Button
-                    type="submit"
-                    variant="danger"
-                    className="px-4 validate"
-                  >
-                    Validate
-                  </Button>
-                </div>
-              </Form>
+        <DialogTitle>
+          {otpVerified ? "OTP Verified" : "verifying OTP"}
+        </DialogTitle>
+        <DialogContent>
+          <Form
+            className="card p-2 text-center"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setOtpVerified(true);
+            }}
+          >
+            <h6 className="text-danger">
+              Please enter the one time password <br /> to verify booking
+            </h6>
+            <div>
+              <span>A code has been sent to{"  "}</span>
+              <small>*******{mobileNumber % 10000}</small>
             </div>
+            <div
+              id="otp"
+              className="inputs d-flex flex-row justify-content-center mt-2"
+            >
+              <Form.Control
+                type="number"
+                placeholder="0000"
+                className="text-center w-50 mb-2"
+                value={otp}
+                onChange={(e) => {
+                  setOtp(
+                    e.target.value.toString().length <= 4 ? e.target.value : otp
+                  );
+                }}
+              />
+            </div>
+            <div className="card-2">
+              <div className="content d-flex justify-content-center align-items-center">
+                <span>Didn&#39;t get the code</span>
+                <Button variant="outline-danger ms-3">Resend(1/3)</Button>
+              </div>
+            </div>
+            <div className="mt-4">
+              <Button type="submit" variant="danger" className="px-4 validate">
+                Validate
+              </Button>
+            </div>
+          </Form>
+          <div className="d-flex flex-column align-items-center">
             <Image
               src={
                 otpVerified
@@ -118,59 +128,49 @@ export default function Home() {
               alt="loading"
             />
             <p className="fw-bold m-0">Booking Details</p>
-            <div className="d-flex flex-row align-items-center justify-content-center lh-sm">
-              <div className="card p-2 text-center lh-sm">
-                <div className="d-flex flex-row align-items-center justify-content-center">
-                  <p className="fw-bold fst-italic m-0">Pickup: </p>
-                  <p className="text-muted ms-1 m-0">{pickup}</p>
-                </div>
-                <div className="d-flex flex-row align-items-center justify-content-center">
-                  <p className="fw-bold fst-italic m-0">Destination: </p>
-                  <p className="text-muted ms-1 m-0">{destination}</p>
-                </div>
-                <div className="d-flex flex-row align-items-center justify-content-center">
-                  <p className="fw-bold fst-italic m-0">pickupTime: </p>
-                  <p className="text-muted ms-1 m-0">
-                    {pickupTime}__
-                    {pickupDate}
-                  </p>
-                </div>
-                <div className="d-flex flex-row align-items-center justify-content-center">
-                  <p className="fw-bold fst-italic m-0">number of Person: </p>
-                  <p className="text-muted ms-1 m-0">{noofPersons}</p>
-                </div>
-                <div className="d-flex flex-row align-items-center justify-content-center">
-                  <p className="fw-bold fst-italic m-0">Car Type: </p>
-                  <p className="text-muted ms-1 m-0">{carType}</p>
-                </div>
-                <div className="d-flex flex-row align-items-center justify-content-center">
-                  <p className="fw-bold fst-italic m-0">Email Id: </p>
-                  <p className="text-muted ms-1 m-0">{emailId}</p>
-                </div>
-                <div className="d-flex flex-row align-items-center justify-content-center">
-                  <p className="fw-bold fst-italic m-0">Mobile Number: </p>
-                  <p className="text-muted ms-1 m-0">{mobileNumber}</p>
-                </div>
+          </div>
+          <div className="d-flex flex-row align-items-center justify-content-center lh-sm">
+            <div className="card p-2 text-center lh-sm">
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">Pickup: </p>
+                <p className="text-muted ms-1 m-0">{pickup}</p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">Destination: </p>
+                <p className="text-muted ms-1 m-0">{destination}</p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">pickupTime: </p>
+                <p className="text-muted ms-1 m-0">
+                  {pickupTime}__
+                  {pickupDate}
+                </p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">number of Person: </p>
+                <p className="text-muted ms-1 m-0">{noofPersons}</p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">Car Type: </p>
+                <p className="text-muted ms-1 m-0">{carType}</p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">Email Id: </p>
+                <p className="text-muted ms-1 m-0">{emailId}</p>
+              </div>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <p className="fw-bold fst-italic m-0">Mobile Number: </p>
+                <p className="text-muted ms-1 m-0">{mobileNumber}</p>
               </div>
             </div>
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Edit Booking</Button>
-          <Button onClick={props.onHide} disabled={!otpVerified}>
-            Conform Booking
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Agree</Button>
+        </DialogActions>
+      </Dialog>
 
-  return (
-    <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
       <Image
         src="/car-gray-2.jpg"
         layout="fill"
@@ -275,7 +275,7 @@ export default function Home() {
                   setNoofPersons(noofPersons > 1 ? noofPersons - 1 : 1)
                 }
               >
-                <h2>-</h2>
+                <RemoveIcon />
               </Button>
               <Button
                 type="button"
@@ -294,7 +294,7 @@ export default function Home() {
                   setNoofPersons(noofPersons <= 50 ? noofPersons + 1 : 50)
                 }
               >
-                <h3>+</h3>
+                <AddIcon />
               </Button>
             </div>
             <div className="mb-3 d-flex align-items-center justify-content-center">
@@ -364,7 +364,12 @@ export default function Home() {
               (We will send OTP to the mobile number)
             </div>
 
-            <Button variant="primary" className="w-100" type="submit">
+            <Button
+              variant="primary"
+              type="submit"
+              className="w-100"
+              onClick={handleClickOpen}
+            >
               verify OTP
             </Button>
           </Form>

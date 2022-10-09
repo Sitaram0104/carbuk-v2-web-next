@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
     <Provider store={store}>
       <Head>
         <title>Carbuk</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
         <meta property="og:image" content="/carbuk_logo.png" key="ogimage" />
         <meta property="og:title" content="CARBUK" key="ogtitle" />
         <meta
