@@ -8,6 +8,7 @@ const bookingsRef = collection(db, "bookings");
 
 export default function Home() {
   const [bookings, setBookings] = useState([]);
+  const [servedBy, setServedBy] = useState("Zafar");
 
   useEffect(() => {
     const unsubscribe = onSnapshot(bookingsRef, (snapshot) => {
@@ -57,7 +58,16 @@ export default function Home() {
                   <br />
                   Number
                 </th>
-                <th>Name</th>
+                <th>
+                  Served
+                  <br />
+                  by
+                </th>
+                <th>
+                  User
+                  <br />
+                  Name
+                </th>
                 <th>Email Id</th>
                 <th>Mobile No</th>
                 <th>Pickup</th>
@@ -96,9 +106,11 @@ export default function Home() {
                   pickup,
                   pickupDate,
                   pickupTime,
+                  servedBy,
                 }) => (
-                  <tr key={key} className="newItem">
+                  <tr key={key} className={`newItem ${servedBy && "served"}`}>
                     <td>{bookingNumber}</td>
+                    <td>{servedBy}</td>
                     <td>{name}</td>
                     <td>{emailId}</td>
                     <td>{mobileNumber}</td>
@@ -137,6 +149,7 @@ export default function Home() {
                   pickup: "0",
                   pickupDate: "2022-10-08",
                   pickupTime: "15:20",
+                  servedBy: "Zafar",
                 },
                 ...bookings,
               ])

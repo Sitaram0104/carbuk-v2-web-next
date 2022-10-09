@@ -56,6 +56,12 @@ tr:nth-child(odd) {
 tr:nth-child(even) {
   background-color: rgba(68, 56, 173, 0.5);
 }
+tr:nth-child(odd).served {
+  background-color: forestgreen;
+}
+tr:nth-child(even).served {
+  background-color:seagreen;
+}
 
 tr:hover {background-color: coral;}
 

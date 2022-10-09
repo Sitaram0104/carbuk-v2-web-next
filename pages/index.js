@@ -16,10 +16,12 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import NavBar from "../components/NavBar";
 import { collection, doc, setDoc, getDocs } from "firebase/firestore";
 import db from "../firebaseConfig";
+import IconButton from "@mui/material/IconButton";
 
 const bookingsRef = collection(db, "bookings");
 
@@ -30,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
-  const [name, setName] = useState("ABCD");
+  const [name, setName] = useState("Guest User");
   const [pickup, setPickup] = useState("Kharagpur, India");
   const [destination, setDestination] = useState("Kolkata, India");
   const [pickupTime, setPickupTime] = useState("");
@@ -141,6 +143,9 @@ export default function Home() {
       >
         <DialogTitle>
           {otpVerified ? "OTP Verified" : "verifying OTP"}
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
         </DialogTitle>
         <DialogContent>
           <Form
@@ -239,7 +244,9 @@ export default function Home() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Edit Booking</Button>
+          <Button variant="outlined" onClick={handleClose}>
+            Edit Booking
+          </Button>
           <Button onClick={() => addBooking()}>Confirm Booking</Button>
         </DialogActions>
       </Dialog>
