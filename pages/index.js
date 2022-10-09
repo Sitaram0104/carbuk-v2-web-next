@@ -185,7 +185,6 @@ export default function Home() {
           <div className="d-flex flex-column align-items-center">
             <DialogContentText>Login</DialogContentText>
             <TextField
-              autoFocus
               margin="dense"
               id="name"
               label="Name"
@@ -193,15 +192,33 @@ export default function Home() {
               variant="outlined"
             />
             <TextField
-              autoFocus
+              margin="dense"
+              id="mobile"
+              label="Mobile Number"
+              variant="outlined"
+              type="number"
+              placeholder="0000-000-000"
+              value={mobileNumber}
+              required
+              onChange={(e) =>
+                setMobileNumber(
+                  e.target.value.toString().length <= 10
+                    ? e.target.value
+                    : mobileNumber
+                )
+              }
+            />
+            <TextField
               margin="dense"
               id="email"
               label="Email Address"
-              type="email"
               variant="outlined"
+              type="email"
+              placeholder="name@example.com"
+              value={emailId}
+              onChange={(e) => setEmailId(e.target.value)}
             />
             <TextField
-              autoFocus
               margin="dense"
               id="password"
               label="Password"
