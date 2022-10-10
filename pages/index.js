@@ -131,7 +131,9 @@ export default function Home() {
     setPickupDate(
       `${pad(d.getFullYear())}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
     );
-  }, [d]);
+  }, []);
+
+  console.log({ pickupTime, pickupDate });
 
   return (
     <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
