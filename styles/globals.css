@@ -1,5 +1,4 @@
-@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css');
-
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css");
 
 html,
 body {
@@ -23,33 +22,27 @@ input::-webkit-inner-spin-button {
   text-align: center;
 }
 
-hr.style1{
-	border-top: 1px solid #8c8b8b;
-}
-
-.newItem {
-  max-height: 0;
-  opacity: 0;
-  animation: grow 1s ease-in-out forwards;
-  -webkit-animation: grow 1s ease-in-out forwards;
-  white-space: nowrap;
+hr.style1 {
+  border-top: 1px solid #8c8b8b;
 }
 
 table {
-  border-collapse: collapse;  
+  border-collapse: collapse;
   width: 100%;
-  color: black;
+  color: white;
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 2px 5px;
   border: 1px solid black;
 }
 
-td{color:white}
-
-thead{background-color: rgba(8, 10, 134, 1);}
+thead {
+  background-color: rgba(8, 10, 134, 1);
+  color: black;
+}
 
 tr:nth-child(odd) {
   background-color: rgba(113, 115, 192, 0.5);
@@ -57,24 +50,40 @@ tr:nth-child(odd) {
 tr:nth-child(even) {
   background-color: rgba(68, 56, 173, 0.5);
 }
+
+.newItem {
+  opacity: 0;
+  -webkit-animation: grow 1s ease-in-out forwards;
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 0px;
+  animation: grow 1s ease-in-out forwards;
+}
+
+tr.served {
+  background-color: forestgreen;
+}
 tr:nth-child(odd).served {
   background-color: forestgreen;
 }
 tr:nth-child(even).served {
-  background-color:seagreen;
+  background-color: seagreen;
 }
 
-tr:hover {background-color: coral;}
+tr:hover,
+tr.served:hover {
+  background-color: coral;
+}
 
 @-webkit-keyframes grow {
   to {
-    max-height: 20px;
+    line-height: 120%;
     opacity: 1;
   }
 }
 @keyframes grow {
   to {
-    max-height: 20px;
+    line-height: 120%;
     opacity: 1;
   }
 }
