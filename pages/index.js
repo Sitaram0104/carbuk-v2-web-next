@@ -133,8 +133,6 @@ export default function Home() {
     );
   }, []);
 
-  console.log({ pickupTime, pickupDate });
-
   return (
     <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
       <Dialog
