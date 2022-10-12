@@ -16,19 +16,27 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import NavBar from "../components/NavBar";
 import { collection, doc, setDoc, getDocs } from "firebase/firestore";
 import db from "../firebaseConfig";
 import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const bookingsRef = collection(db, "bookings");
+const usersRef = collection(db, "users");
 
 const CarTypes = ["Sedan", "SUV", "Van", "Magic"];
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export default function Home() {
@@ -44,6 +52,8 @@ export default function Home() {
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
   const [register, setRegister] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarNotification, setSnackbarNotification] = useState("");
 
   const [d, setD] = useState(new Date());
 
@@ -57,30 +67,37 @@ export default function Home() {
       destination &&
       emailId &&
       mobileNumber &&
-      name &&
       noofPersons &&
       pickup &&
       pickupDate &&
-      pickupTime
+      pickupTime &&
+      otp &&
+      otpVerified
     ) {
-      const querySnapshot = await getDocs(bookingsRef);
-      bookingNumber =
-        Math.max(...querySnapshot.docs.map((doc) => doc.data().bookingNumber)) +
-        1;
+      // const querySnapshot = await getDocs(bookingsRef);
+      // bookingNumber =
+      //   Math.max(...querySnapshot.docs.map((doc) => doc.data().bookingNumber)) +
+      //   1;
 
-      await setDoc(doc(bookingsRef), {
-        bookingNumber,
-        carType,
-        destination,
-        emailId,
-        mobileNumber,
-        name,
-        noofPerson: noofPersons,
-        pickup,
-        pickupDate,
-        pickupTime,
-        servedBy: "ABCD",
-      }).then(() => setModalShow(false));
+      // await setDoc(doc(bookingsRef), {
+      //   bookingNumber,
+      //   carType,
+      //   destination,
+      //   emailId,
+      //   mobileNumber,
+      //   name,
+      //   noofPerson: noofPersons,
+      //   pickup,
+      //   pickupDate,
+      //   pickupTime,
+      //   servedBy: "ABCD",
+      // }).then(() => {
+      //   setModalShow(false);
+      //   handleClickSnackbar();
+      // });
+      setSnackbarNotification("Booking successfull");
+      setModalShow(false);
+      handleClickSnackbar();
     } else {
       alert(
         `${
@@ -102,6 +119,10 @@ export default function Home() {
             ? "pickupDate"
             : !pickupTime
             ? "pickupTime"
+            : !otp
+            ? "otp"
+            : !otpVerified
+            ? "otp not verified"
             : "all"
         } field is empty`
       );
@@ -109,7 +130,19 @@ export default function Home() {
   };
 
   const handleClickOpen = () => {
-    setModalShow(true);
+    if (
+      carType &&
+      destination &&
+      emailId &&
+      mobileNumber &&
+      name &&
+      noofPersons &&
+      pickup &&
+      pickupDate &&
+      pickupTime
+    ) {
+      setModalShow(true);
+    }
   };
 
   const handleLoginOpen = () => {
@@ -118,6 +151,22 @@ export default function Home() {
 
   const handleClose = () => {
     setModalShow(false);
+    setLoginModalShow(false);
+  };
+
+  const registerUser = async () => {
+    // await setDoc(doc(usersRef), {
+    //   emailId,
+    //   mobileNumber,
+    //   name,
+    //   password,
+    // }).then(() => {
+    //   setSnackbarNotification("registered successfully");
+    //   handleClickSnackbar();
+    //   setLoginModalShow(false);
+    // });
+    setSnackbarNotification("registered successfully");
+    handleClickSnackbar();
     setLoginModalShow(false);
   };
 
@@ -133,8 +182,48 @@ export default function Home() {
     );
   }, []);
 
+  const handleClickSnackbar = () => {
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  // const action = (
+  //   <>
+  //     <Button color="secondary" size="small" onClick={handleCloseSnackbar}>
+  //       UNDO
+  //     </Button>
+  //     <IconButton
+  //       size="small"
+  //       aria-label="close"
+  //       color="inherit"
+  //       onClick={handleCloseSnackbar}
+  //     >
+  //       <CloseIcon fontSize="small" />
+  //     </IconButton>
+  //   </>
+  // );
+
   return (
     <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {snackbarNotification}
+        </Alert>
+      </Snackbar>
       <Dialog
         open={modalShow}
         TransitionComponent={Transition}
@@ -172,6 +261,7 @@ export default function Home() {
                 placeholder="0000"
                 className="text-center w-50 mb-2"
                 value={otp}
+                required
                 onChange={(e) => {
                   setOtp(
                     e.target.value.toString().length <= 4 ? e.target.value : otp
@@ -255,82 +345,89 @@ export default function Home() {
       <Dialog open={loginModalShow} onClose={handleClose}>
         <DialogTitle>{register ? "Register" : "Login"}</DialogTitle>
         <DialogContent>
-          <div className="d-flex flex-column align-items-center">
-            <div className="d-flex mb-1 justify-content-between w-100">
-              <Button
-                variant={`${!register ? "outline-primary" : "primary"}`}
-                onClick={() => setRegister(false)}
-                disabled={!register}
-              >
-                Login
-              </Button>
-              <Button
-                variant={`${register ? "outline-primary" : "primary"}`}
-                onClick={() => setRegister(true)}
-                disabled={register}
-              >
-                Register
+          <div className="d-flex flex-row align-items-center">
+            <div className="w-50">
+              <Button variant="primary" onClick={handleClose}>
+                Guest User
               </Button>
             </div>
-            <hr className="style1 w-100" />
-            {!register && (
+
+            <div className="d-flex flex-column align-items-center">
+              <div className="d-flex mb-1 justify-content-between w-100">
+                <Button
+                  variant={`${!register ? "outline-primary" : "primary"}`}
+                  onClick={() => setRegister(false)}
+                  disabled={!register}
+                >
+                  Login
+                </Button>
+                <Button
+                  variant={`${register ? "outline-primary" : "primary"}`}
+                  onClick={() => setRegister(true)}
+                  disabled={register}
+                >
+                  Register
+                </Button>
+              </div>
+              <hr className="style1 w-100" />
+              {register && (
+                <TextField
+                  margin="dense"
+                  id="name"
+                  label="Name"
+                  type="text"
+                  variant="outlined"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              )}
               <TextField
                 margin="dense"
-                id="name"
-                label="Name"
-                type="text"
+                id="mobile"
+                label="Mobile Number"
                 variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                type="number"
+                placeholder="0000-000-000"
+                value={mobileNumber}
+                required
+                onChange={(e) =>
+                  setMobileNumber(
+                    e.target.value.toString().length <= 10
+                      ? e.target.value
+                      : mobileNumber
+                  )
+                }
               />
-            )}
-            <TextField
-              margin="dense"
-              id="mobile"
-              label="Mobile Number"
-              variant="outlined"
-              type="number"
-              placeholder="0000-000-000"
-              value={mobileNumber}
-              required
-              onChange={(e) =>
-                setMobileNumber(
-                  e.target.value.toString().length <= 10
-                    ? e.target.value
-                    : mobileNumber
-                )
-              }
-            />
-            <TextField
-              margin="dense"
-              id="email"
-              label="Email Address"
-              variant="outlined"
-              type="email"
-              placeholder="name@example.com"
-              value={emailId}
-              onChange={(e) => setEmailId(e.target.value)}
-            />
-            <TextField
-              margin="dense"
-              id="password"
-              label="Password"
-              type="password"
-              variant="outlined"
-            />
+              <TextField
+                margin="dense"
+                id="email"
+                label="Email Address"
+                variant="outlined"
+                type="email"
+                placeholder="name@example.com"
+                value={emailId}
+                onChange={(e) => setEmailId(e.target.value)}
+              />
+              <TextField
+                margin="dense"
+                id="password"
+                label="Password"
+                type="password"
+                variant="outlined"
+              />
+              {!register ? (
+                <Button className="w-100" onClick={handleClose}>
+                  Login
+                </Button>
+              ) : (
+                <Button className="w-100" onClick={registerUser}>
+                  Register
+                </Button>
+              )}
+            </div>
           </div>
         </DialogContent>
-        <DialogActions>
-          {!register ? (
-            <Button className="w-100" onClick={handleClose}>
-              Login
-            </Button>
-          ) : (
-            <Button className="w-100" onClick={handleClose}>
-              Register
-            </Button>
-          )}
-        </DialogActions>
+        <DialogActions></DialogActions>
       </Dialog>
 
       <Image
@@ -357,7 +454,7 @@ export default function Home() {
               <FloatingLabel
                 controlId="pickupInput"
                 label="Enter Pickup Location"
-                className="w-50"
+                className="w-50 d-flex align-items-center me-2"
               >
                 <Form.Control
                   type="text"
@@ -366,12 +463,15 @@ export default function Home() {
                   onChange={(e) => setPickup(e.target.value)}
                   className={`bg-gradient ${!pickup && "bg-secondary"}`}
                 />
+                <EditIcon
+                  style={{ backgroundColor: "white", height: "3.5rem" }}
+                />
               </FloatingLabel>
 
               <FloatingLabel
                 controlId="destinationInput"
                 label="Enter Destination"
-                className="w-50"
+                className="w-50 d-flex align-items-center"
               >
                 <Form.Control
                   type="text"
@@ -380,13 +480,16 @@ export default function Home() {
                   onChange={(e) => setDestination(e.target.value)}
                   className={`bg-gradient ${!destination && "bg-secondary"}`}
                 />
+                <EditIcon
+                  style={{ backgroundColor: "white", height: "3.5rem" }}
+                />
               </FloatingLabel>
             </div>
             <div className="mb-3 d-flex flex-row">
               <FloatingLabel
                 controlId="pickupTimeInput"
                 label="Select Pickup Time"
-                className="w-50"
+                className="w-50 d-flex align-items-center me-2"
               >
                 <Form.Control
                   type="time"
@@ -397,11 +500,14 @@ export default function Home() {
                     !pickupTime ? "bg-secondary" : "bg-light"
                   }`}
                 />
+                <EditIcon
+                  style={{ backgroundColor: "white", height: "3.5rem" }}
+                />
               </FloatingLabel>
               <FloatingLabel
                 controlId="pickupDateInput"
                 label="Select pickup Date"
-                className="w-50"
+                className="w-50 d-flex align-items-center"
               >
                 <Form.Control
                   type="date"
@@ -411,6 +517,9 @@ export default function Home() {
                   className={`bg-gradient ${
                     !pickupDate ? "bg-secondary" : "bg-light"
                   }`}
+                />
+                <EditIcon
+                  style={{ backgroundColor: "white", height: "3.5rem" }}
                 />
               </FloatingLabel>
             </div>
@@ -469,11 +578,11 @@ export default function Home() {
             <FloatingLabel
               controlId="carNameInput"
               label="Type Car Name for any Specific Type(Optional)"
-              className="mb-2"
+              className="mb-2 d-flex align-items-center"
             >
               <Form.Control
                 type="text"
-                placeholder="Password"
+                placeholder="carType"
                 value={CarTypes.includes(carType) ? "" : carType}
                 onChange={(e) => setCarType(e.target.value)}
                 className={`bg-gradient ${
@@ -481,12 +590,15 @@ export default function Home() {
                   "bg-secondary"
                 }`}
               />
+              <EditIcon
+                style={{ backgroundColor: "white", height: "3.5rem" }}
+              />
             </FloatingLabel>
 
             <FloatingLabel
               controlId="emailInput"
               label="Enter Email Id"
-              className="mb-2"
+              className="mb-2 d-flex align-items-center"
             >
               <Form.Control
                 type="email"
@@ -495,9 +607,16 @@ export default function Home() {
                 onChange={(e) => setEmailId(e.target.value)}
                 className={`bg-gradient ${!emailId && "bg-secondary"}`}
               />
+              <EditIcon
+                style={{ backgroundColor: "white", height: "3.5rem" }}
+              />
             </FloatingLabel>
 
-            <FloatingLabel controlId="mobileInput" label="Enter Mobile Number">
+            <FloatingLabel
+              controlId="mobileInput"
+              label="Enter Mobile Number"
+              className="d-flex align-items-center"
+            >
               <Form.Control
                 type="number"
                 placeholder="0000-000-000"
@@ -512,6 +631,9 @@ export default function Home() {
                 }
                 className={`bg-gradient ${!mobileNumber && "bg-secondary"}`}
               />
+              <EditIcon
+                style={{ backgroundColor: "white", height: "3.5rem" }}
+              />
             </FloatingLabel>
             <div className="text-center small text-muted mb-3">
               (We will send OTP to the mobile number)
@@ -525,6 +647,7 @@ export default function Home() {
             >
               verify OTP
             </Button>
+            <Button onClick={handleClickSnackbar}>Open simple snackbar</Button>
           </Form>
         </div>
       </div>
