@@ -20,7 +20,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import NavBar from "../components/NavBar";
-import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  serverTimestamp,
+} from "firebase/firestore";
 import db from "../firebaseConfig";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
@@ -91,6 +97,7 @@ export default function Home() {
       //   pickupDate,
       //   pickupTime,
       //   servedBy: "ABCD",
+      // timestamp: serverTimestamp(),
       // }).then(() => {
       //   setModalShow(false);
       //   handleClickSnackbar();

@@ -1,14 +1,22 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
-import { collection, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  updateDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 import db from "../firebaseConfig";
 
 const bookingsRef = collection(db, "bookings");
 
 export default function Home() {
   const [bookings, setBookings] = useState([]);
-  const [servedBy, setServedBy] = useState("Zafar");
+  const [saveServedBy, setSaveServedBy] = useState("");
+  const [editServedBy, setEditServedBy] = useState("");
 
   useEffect(() => {
     const unsubscribe = onSnapshot(bookingsRef, (snapshot) => {
@@ -24,6 +32,22 @@ export default function Home() {
       unsubscribe();
     };
   }, []);
+
+  const handleSaveServedBy = async (key) => {
+    const updateServedBy = await updateDoc(doc(db, "bookings", key), {
+      servedBy: saveServedBy,
+      timestamp: serverTimestamp(),
+    }).then(() => {
+      setEditServedBy({});
+    });
+  };
+
+  const deleteBooking = async (key) => {
+    if (confirm("Confirm delete?") == true) {
+      await deleteDoc(doc(db, "bookings", key));
+    } else {
+    }
+  };
 
   return (
     <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
@@ -83,12 +107,6 @@ export default function Home() {
                   <br />
                   and Time
                 </th>
-                <th>Distance</th>
-                <th>
-                  Total
-                  <br />
-                  Fare
-                </th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -110,7 +128,28 @@ export default function Home() {
                 }) => (
                   <tr key={key} className={`newItem ${servedBy && "served"}`}>
                     <td>{bookingNumber}</td>
-                    <td>{servedBy}</td>
+                    <td
+                      onClick={() => {
+                        setEditServedBy({ key, servedBy });
+                        setSaveServedBy(servedBy);
+                      }}
+                    >
+                      {editServedBy.key === key ? (
+                        <>
+                          <input
+                            value={saveServedBy}
+                            onChange={(e) => setSaveServedBy(e.target.value)}
+                          />
+                          <button onClick={() => handleSaveServedBy(key)}>
+                            save
+                          </button>
+                        </>
+                      ) : (
+                        <div style={{ backgroundColor: "blue" }}>
+                          {servedBy}
+                        </div>
+                      )}
+                    </td>
                     <td>{name}</td>
                     <td>{emailId}</td>
                     <td>{mobileNumber}</td>
@@ -123,10 +162,13 @@ export default function Home() {
                       {" | "}
                       {pickupDate}
                     </td>
-                    <td>5 km</td>
-                    <td>500 ₹</td>
                     <td>
-                      <div style={{ cursor: "pointer" }}>🗑️</div>
+                      <div
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteBooking(key)}
+                      >
+                        🗑️
+                      </div>
                     </td>
                   </tr>
                 )
