@@ -501,6 +501,7 @@ export default function Home() {
                 <Form.Control
                   type="time"
                   value={pickupTime}
+                  // min={`${pad(d.getHours())}:${pad(d.getMinutes())}`}
                   onChange={(e) => setPickupTime(e.target.value)}
                   required
                   className={`bg-gradient ${
@@ -519,6 +520,9 @@ export default function Home() {
                 <Form.Control
                   type="date"
                   value={pickupDate}
+                  min={`${pad(d.getFullYear())}-${pad(d.getMonth() + 1)}-${pad(
+                    d.getDate()
+                  )}`}
                   onChange={(e) => setPickupDate(e.target.value)}
                   required
                   className={`bg-gradient ${
