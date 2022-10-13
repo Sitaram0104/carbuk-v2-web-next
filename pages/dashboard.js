@@ -15,9 +15,8 @@ const bookingsRef = collection(db, "bookings");
 
 export default function Home() {
   const [bookings, setBookings] = useState([]);
-  const [saveServedBy, setSaveServedBy] = useState("");
-  const [editServedBy, setEditServedBy] = useState("");
   const [editField, setEditField] = useState({});
+  const [sortByButton, setSortByButton] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(bookingsRef, (snapshot) => {
@@ -25,23 +24,18 @@ export default function Home() {
       snapshot.forEach((doc) => {
         b.push({ key: doc.id, ...doc.data() });
       });
-      b.sort((a, b) => b.bookingNumber - a.bookingNumber);
+      if (sortByButton) {
+        b.sort(CustomSort);
+      } else {
+        b.sort((a, b) => b.bookingNumber - a.bookingNumber);
+      }
       setBookings(b);
     });
 
     return () => {
       unsubscribe();
     };
-  }, []);
-
-  const handleSaveServedBy = async (key) => {
-    const updateServedBy = await updateDoc(doc(db, "bookings", key), {
-      servedBy: saveServedBy,
-      timestamp: serverTimestamp(),
-    }).then(() => {
-      setEditServedBy({});
-    });
-  };
+  }, [sortByButton]);
 
   const deleteBooking = async (key) => {
     if (confirm("Confirm delete?") == true) {
@@ -59,14 +53,20 @@ export default function Home() {
     });
   };
 
-  const handleSaveTime = async (key) => {
-    const updateSaveTimeField = await updateDoc(doc(db, "bookings", key), {
-      pickupTime: editField.fieldValueTime,
-      pickupDate: editField.fieldValueDate,
-      timestamp: serverTimestamp(),
-    }).then(() => {
-      setEditField({});
-    });
+  const CustomSort = (a, b) => {
+    if (a.pickupDate < b.pickupDate) {
+      return 1;
+    } else if (a.pickupDate > b.pickupDate) {
+      return -1;
+    } else {
+      if (a.pickupTime < b.pickupTime) {
+        return 1;
+      } else if (a.pickupTime > b.pickupTime) {
+        return -1;
+      } else {
+        return 0;
+      }
+    }
   };
 
   return (
@@ -91,8 +91,11 @@ export default function Home() {
             overflowX: "auto",
           }}
         >
-          <div style={{ color: "white" }}>
-            Total Bookings: {bookings.length + 1}
+          <div style={{ color: "white" }} className="d-flex">
+            <div className="me-3">Total Bookings: {bookings.length + 1}</div>
+            <button onClick={() => setSortByButton(!sortByButton)}>
+              Sort by date and time
+            </button>
           </div>
           <table>
             <thead>
@@ -155,26 +158,33 @@ export default function Home() {
                     <td>{bookingNumber}</td>
                     <td
                       onClick={() => {
-                        setEditServedBy({ key, servedBy });
-                        setSaveServedBy(servedBy);
+                        setEditField({
+                          key,
+                          field: "servedBy",
+                          fieldValue: servedBy,
+                        });
                       }}
                     >
-                      {editServedBy.key === key ? (
+                      {editField.key === key &&
+                      editField.field === "servedBy" ? (
                         <>
                           <input
-                            value={saveServedBy}
-                            onChange={(e) => setSaveServedBy(e.target.value)}
+                            value={editField?.fieldValue}
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "servedBy",
+                                fieldValue: e.target.value,
+                              })
+                            }
                           />
-                          <button onClick={() => handleSaveServedBy(key)}>
-                            save
-                          </button>
+                          <button onClick={() => handleSave(key)}>save</button>
                         </>
                       ) : (
-                        <div style={{ backgroundColor: "blue" }}>
-                          {servedBy}
-                        </div>
+                        <div>{servedBy}</div>
                       )}
                     </td>
+
                     <td
                       onClick={() => {
                         setEditField({ key, field: "name", fieldValue: name });
