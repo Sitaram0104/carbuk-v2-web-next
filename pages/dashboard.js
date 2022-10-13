@@ -445,7 +445,10 @@ export default function Home() {
               setBookings([
                 {
                   key: bookings.length + 1,
-                  bookingNumber: bookings.length + 1,
+                  bookingNumber:
+                    Math.max(
+                      ...bookings.map(({ bookingNumber }) => bookingNumber)
+                    ) + 1,
                   carType: "0",
                   destination: "0",
                   emailId: "0@gmail.com",

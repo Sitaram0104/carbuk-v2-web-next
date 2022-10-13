@@ -654,7 +654,7 @@ export default function Home() {
             >
               verify OTP
             </Button>
-            <Button onClick={handleClickSnackbar}>Open simple snackbar</Button>
+            {/* <Button onClick={handleClickSnackbar}>Open simple snackbar</Button> */}
           </Form>
         </div>
       </div>
