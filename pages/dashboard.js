@@ -17,6 +17,7 @@ export default function Home() {
   const [bookings, setBookings] = useState([]);
   const [saveServedBy, setSaveServedBy] = useState("");
   const [editServedBy, setEditServedBy] = useState("");
+  const [editField, setEditField] = useState({});
 
   useEffect(() => {
     const unsubscribe = onSnapshot(bookingsRef, (snapshot) => {
@@ -47,6 +48,25 @@ export default function Home() {
       await deleteDoc(doc(db, "bookings", key));
     } else {
     }
+  };
+
+  const handleSave = async (key) => {
+    const updateSaveField = await updateDoc(doc(db, "bookings", key), {
+      [editField.field]: editField.fieldValue,
+      timestamp: serverTimestamp(),
+    }).then(() => {
+      setEditField({});
+    });
+  };
+
+  const handleSaveTime = async (key) => {
+    const updateSaveTimeField = await updateDoc(doc(db, "bookings", key), {
+      pickupTime: editField.fieldValueTime,
+      pickupDate: editField.fieldValueDate,
+      timestamp: serverTimestamp(),
+    }).then(() => {
+      setEditField({});
+    });
   };
 
   return (
@@ -103,9 +123,14 @@ export default function Home() {
                 </th>
                 <th>Car Type</th>
                 <th>
-                  Pickup Date
+                  Pickup
                   <br />
-                  and Time
+                  Time
+                </th>
+                <th>
+                  Pickup
+                  <br />
+                  Date
                 </th>
                 <th>Delete</th>
               </tr>
@@ -150,18 +175,257 @@ export default function Home() {
                         </div>
                       )}
                     </td>
-                    <td>{name}</td>
-                    <td>{emailId}</td>
-                    <td>{mobileNumber}</td>
-                    <td>{pickup}</td>
-                    <td>{destination}</td>
-                    <td>{noofPerson}</td>
-                    <td>{carType}</td>
-                    <td>
-                      {pickupTime}
-                      {" | "}
-                      {pickupDate}
+                    <td
+                      onClick={() => {
+                        setEditField({ key, field: "name", fieldValue: name });
+                      }}
+                    >
+                      {editField.key === key && editField.field === "name" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "name",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{name}</div>
+                      )}
                     </td>
+                    <td
+                      onClick={() => {
+                        setEditField({
+                          key,
+                          field: "emailId",
+                          fieldValue: emailId,
+                        });
+                      }}
+                    >
+                      {editField.key === key &&
+                      editField.field === "emailId" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "emailId",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{emailId}</div>
+                      )}
+                    </td>
+                    <td
+                      onClick={() => {
+                        setEditField({
+                          key,
+                          field: "mobileNumber",
+                          fieldValue: mobileNumber,
+                        });
+                      }}
+                    >
+                      {editField.key === key &&
+                      editField.field === "mobileNumber" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "mobileNumber",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{mobileNumber}</div>
+                      )}
+                    </td>
+
+                    <td
+                      onClick={() => {
+                        setEditField({
+                          key,
+                          field: "pickup",
+                          fieldValue: pickup,
+                        });
+                      }}
+                    >
+                      {editField.key === key && editField.field === "pickup" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "pickup",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{pickup}</div>
+                      )}
+                    </td>
+                    <td
+                      onClick={() => {
+                        setEditField({
+                          key,
+                          field: "destination",
+                          fieldValue: destination,
+                        });
+                      }}
+                    >
+                      {editField.key === key &&
+                      editField.field === "destination" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "destination",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{destination}</div>
+                      )}
+                    </td>
+                    <td
+                      onClick={() => {
+                        setEditField({
+                          key,
+                          field: "noofPerson",
+                          fieldValue: noofPerson,
+                        });
+                      }}
+                    >
+                      {editField.key === key &&
+                      editField.field === "noofPerson" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "noofPerson",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{noofPerson}</div>
+                      )}
+                    </td>
+                    <td
+                      onClick={() => {
+                        setEditField({
+                          key,
+                          field: "carType",
+                          fieldValue: carType,
+                        });
+                      }}
+                    >
+                      {editField.key === key &&
+                      editField.field === "carType" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "carType",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{carType}</div>
+                      )}
+                    </td>
+
+                    <td
+                      onClick={() => {
+                        setEditField({
+                          key,
+                          field: "pickupTime",
+                          fieldValue: pickupTime,
+                        });
+                      }}
+                    >
+                      {editField.key === key &&
+                      editField.field === "pickupTime" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            type="time"
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "pickupTime",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{pickupTime}</div>
+                      )}
+                    </td>
+                    <td
+                      onClick={() => {
+                        setEditField({
+                          key,
+                          field: "pickupDate",
+                          fieldValue: pickupDate,
+                        });
+                      }}
+                    >
+                      {editField.key === key &&
+                      editField.field === "pickupDate" ? (
+                        <>
+                          <input
+                            value={editField?.fieldValue}
+                            type="date"
+                            onChange={(e) =>
+                              setEditField({
+                                key,
+                                field: "pickupDate",
+                                fieldValue: e.target.value,
+                              })
+                            }
+                          />
+                          <button onClick={() => handleSave(key)}>save</button>
+                        </>
+                      ) : (
+                        <div>{pickupDate}</div>
+                      )}
+                    </td>
+
                     <td>
                       <div
                         style={{ cursor: "pointer" }}
