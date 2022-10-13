@@ -80,28 +80,28 @@ export default function Home() {
       otp &&
       otpVerified
     ) {
-      // const querySnapshot = await getDocs(bookingsRef);
-      // bookingNumber =
-      //   Math.max(...querySnapshot.docs.map((doc) => doc.data().bookingNumber)) +
-      //   1;
+      const querySnapshot = await getDocs(bookingsRef);
+      bookingNumber =
+        Math.max(...querySnapshot.docs.map((doc) => doc.data().bookingNumber)) +
+        1;
 
-      // await setDoc(doc(bookingsRef), {
-      //   bookingNumber,
-      //   carType,
-      //   destination,
-      //   emailId,
-      //   mobileNumber,
-      //   name,
-      //   noofPerson: noofPersons,
-      //   pickup,
-      //   pickupDate,
-      //   pickupTime,
-      //   servedBy: "ABCD",
-      // timestamp: serverTimestamp(),
-      // }).then(() => {
-      //   setModalShow(false);
-      //   handleClickSnackbar();
-      // });
+      await setDoc(doc(bookingsRef), {
+        bookingNumber,
+        carType,
+        destination,
+        emailId,
+        mobileNumber,
+        name,
+        noofPerson: noofPersons,
+        pickup,
+        pickupDate,
+        pickupTime,
+        servedBy: "ABCD",
+        timestamp: serverTimestamp(),
+      }).then(() => {
+        setModalShow(false);
+        handleClickSnackbar();
+      });
       setSnackbarNotification("Booking successfull");
       setModalShow(false);
       handleClickSnackbar();
@@ -654,7 +654,6 @@ export default function Home() {
             >
               verify OTP
             </Button>
-            {/* <Button onClick={handleClickSnackbar}>Open simple snackbar</Button> */}
           </Form>
         </div>
       </div>
