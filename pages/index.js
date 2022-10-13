@@ -64,7 +64,7 @@ export default function Home() {
   const [d, setD] = useState(new Date());
 
   const [modalShow, setModalShow] = useState(false);
-  const [loginModalShow, setLoginModalShow] = useState(true);
+  const [loginModalShow, setLoginModalShow] = useState(false);
 
   const addBooking = async () => {
     const bookingNumber = 1;
