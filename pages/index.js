@@ -56,6 +56,9 @@ export default function Home() {
   const [emailId, setEmailId] = useState("g@gmail.com");
   const [mobileNumber, setMobileNumber] = useState("1234567891");
   const [otp, setOtp] = useState("");
+  const [otpGenerate, setOtpGenerate] = useState(
+    Math.floor((1 + Math.random() * 9) * 1000)
+  );
   const [otpVerified, setOtpVerified] = useState(false);
   const [register, setRegister] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -166,7 +169,7 @@ export default function Home() {
     }
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = async () => {
     if (
       carType &&
       destination &&
@@ -178,6 +181,37 @@ export default function Home() {
       pickupDate &&
       pickupTime
     ) {
+      const apikey = "MzY0MzcyMzE1NDc1NjEzNzQ4NjczMzRmNDM3OTc5NTI=";
+      const address = "https://api.textlocal.in/send/?";
+      let message = `Your carbuk.com Verification code is ${otpGenerate}`;
+
+      message = encodeURIComponent(message);
+      const numbers = mobileNumber; //user number to send otp
+      const sender = "CARBUK";
+      const url =
+        address +
+        "apikey=" +
+        apikey +
+        "&numbers=" +
+        numbers +
+        "&message=" +
+        message +
+        "&sender=" +
+        sender;
+      const resp = await fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.status === "success") {
+            enqueueSnackbar(`otp sent to ${mobileNumber} successfully`, {
+              variant: "success",
+            });
+          } else {
+            enqueueSnackbar("error in sending sms", {
+              variant: "error",
+            });
+          }
+        });
       setModalShow(true);
     }
   };
@@ -245,7 +279,17 @@ export default function Home() {
             className="card p-2 text-center"
             onSubmit={(e) => {
               e.preventDefault();
-              setOtpVerified(true);
+              if (Number(otp) === otpGenerate) {
+                setOtpVerified(true);
+                enqueueSnackbar("otp verified", {
+                  variant: "success",
+                });
+              } else {
+                enqueueSnackbar(" incorrect otp", {
+                  variant: "error",
+                });
+                setOtpVerified(false);
+              }
             }}
           >
             <h6 className="text-danger">
