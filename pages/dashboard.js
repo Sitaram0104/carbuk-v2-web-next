@@ -10,6 +10,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import db from "../firebaseConfig";
+import { useSnackbar } from "notistack";
 
 const bookingsRef = collection(db, "bookings");
 
@@ -17,6 +18,7 @@ export default function Home() {
   const [bookings, setBookings] = useState([]);
   const [editField, setEditField] = useState({});
   const [sortByButton, setSortByButton] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(bookingsRef, (snapshot) => {
@@ -50,6 +52,9 @@ export default function Home() {
       timestamp: serverTimestamp(),
     }).then(() => {
       setEditField({});
+      enqueueSnackbar("updated successfully", {
+        variant: "success",
+      });
     });
   };
 

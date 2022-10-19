@@ -29,8 +29,8 @@ import {
 } from "firebase/firestore";
 import db from "../firebaseConfig";
 import IconButton from "@mui/material/IconButton";
-import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { useSnackbar } from "notistack";
 
 const bookingsRef = collection(db, "bookings");
 const usersRef = collection(db, "users");
@@ -58,8 +58,7 @@ export default function Home() {
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
   const [register, setRegister] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarNotification, setSnackbarNotification] = useState("");
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [d, setD] = useState(new Date());
 
@@ -100,11 +99,42 @@ export default function Home() {
         timestamp: serverTimestamp(),
       }).then(() => {
         setModalShow(false);
-        handleClickSnackbar();
+        enqueueSnackbar("Booking successfull", {
+          variant: "success",
+        });
       });
-      setSnackbarNotification("Booking successfull");
-      setModalShow(false);
-      handleClickSnackbar();
+      const apikey = "MzY0MzcyMzE1NDc1NjEzNzQ4NjczMzRmNDM3OTc5NTI=";
+      const address = "https://api.textlocal.in/send/?";
+      let message = `CARBUK : New booking from ${pickup} to ${destination} at ${pickupDate}, ${pickupTime} Mobile No. ${mobileNumber} car_type ${carType}`;
+
+      message = encodeURIComponent(message);
+      // const numbers = "7501541165"; //sitaram
+      const numbers = "9046674044"; //zafar
+      const sender = "CARBUK";
+      const url =
+        address +
+        "apikey=" +
+        apikey +
+        "&numbers=" +
+        numbers +
+        "&message=" +
+        message +
+        "&sender=" +
+        sender;
+      const resp = await fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.status === "success") {
+            enqueueSnackbar("sms sent to admin successfully", {
+              variant: "success",
+            });
+          } else {
+            enqueueSnackbar("error in sending sms", {
+              variant: "error",
+            });
+          }
+        });
     } else {
       alert(
         `${
@@ -168,12 +198,11 @@ export default function Home() {
     //   name,
     //   password,
     // }).then(() => {
-    //   setSnackbarNotification("registered successfully");
-    //   handleClickSnackbar();
     //   setLoginModalShow(false);
     // });
-    setSnackbarNotification("registered successfully");
-    handleClickSnackbar();
+    enqueueSnackbar("registered successfully", {
+      variant: "success",
+    });
     setLoginModalShow(false);
   };
 
@@ -189,48 +218,14 @@ export default function Home() {
     );
   }, []);
 
-  const handleClickSnackbar = () => {
-    setOpenSnackbar(true);
+  const handleClicknotistack = () => {
+    enqueueSnackbar("I love hooks", {
+      variant: "error",
+    });
   };
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
-
-  // const action = (
-  //   <>
-  //     <Button color="secondary" size="small" onClick={handleCloseSnackbar}>
-  //       UNDO
-  //     </Button>
-  //     <IconButton
-  //       size="small"
-  //       aria-label="close"
-  //       color="inherit"
-  //       onClick={handleCloseSnackbar}
-  //     >
-  //       <CloseIcon fontSize="small" />
-  //     </IconButton>
-  //   </>
-  // );
 
   return (
     <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={2000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          {snackbarNotification}
-        </Alert>
-      </Snackbar>
       <Dialog
         open={modalShow}
         TransitionComponent={Transition}
@@ -245,6 +240,7 @@ export default function Home() {
           </IconButton>
         </DialogTitle>
         <DialogContent>
+          <Button onClick={handleClicknotistack}>Show snackbar</Button>
           <Form
             className="card p-2 text-center"
             onSubmit={(e) => {
