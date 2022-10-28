@@ -43,6 +43,11 @@ export default function NavBar({ handleLoginOpen }) {
               Dashboard
             </Button>
           </Link>
+          <Link href="/togglediv">
+            <Button variant="primary" className="mb-2 me-1">
+              new page testing
+            </Button>
+          </Link>
 
           {/* <Button variant="primary" className="mb-2 me-1">
             Admin

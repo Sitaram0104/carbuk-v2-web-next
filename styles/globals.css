@@ -87,3 +87,55 @@ tr.served:hover {
     opacity: 1;
   }
 }
+
+.containerSection {
+  background-color: "fff;";
+}
+
+.containerSection > label {
+  border-bottom: 1px solid #416378;
+  background-color: #174a69;
+  cursor: pointer;
+  display: block;
+  padding: 10px 20px;
+  margin: 0;
+  color: #fff;
+  position: relative;
+  font-size: 18px;
+}
+
+.containerSection > label::after {
+  content: "\271B";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  opacity: 0.5;
+  font-weight: 100;
+  font-size: 16px;
+}
+
+.containerSection > div {
+  color: #666;
+  max-height: 0;
+  visibility: hidden;
+  padding: 0 20px;
+  opacity: 0;
+  transition: all 0.8s ease;
+}
+
+.containerSection > input {
+  display: none;
+}
+
+.containerSection > input:checked + label + div {
+  max-height: 100vh;
+  visibility: visible;
+  opacity: 1;
+  padding: 20px;
+}
+
+.containerSection > input:checked + label::after {
+  content: "\268A";
+}
