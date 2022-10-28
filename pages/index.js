@@ -250,7 +250,7 @@ export default function Home() {
     setPickupDate(
       `${pad(d.getFullYear())}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
     );
-  }, []);
+  }, [d]);
 
   const handleClicknotistack = () => {
     enqueueSnackbar("I love hooks", {

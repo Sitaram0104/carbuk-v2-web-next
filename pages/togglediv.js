@@ -6,7 +6,7 @@ import ConfirmRide from "../components/ConfirmRide";
 import LoginComp from "../components/LoginComp";
 import NavBar from "../components/NavBar";
 
-export default function togglediv() {
+export default function Togglediv() {
   const [checkedOne, setCheckedOne] = useState("Book");
 
   const handleChangeOne = (a) => {
