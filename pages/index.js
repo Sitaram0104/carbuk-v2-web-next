@@ -112,6 +112,7 @@ export default function Home() {
 
       message = encodeURIComponent(message);
       const numbers = "7501541165"; //sitaram
+      // const numbers = "7586077185"; //admin
       // const numbers = "9046674044"; //zafar
       const sender = "CARBUK";
       const url =

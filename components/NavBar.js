@@ -23,6 +23,7 @@ export default function NavBar({ handleLoginOpen }) {
               style={{ background: "black" }}
             />
             <h2 className="text-white user-select-none">Welcome to Carbuk</h2>
+            <p>Contact us: 7586077185</p>
           </div>
         </Link>
         {/* <div style={{ zIndex: 2 }}>
