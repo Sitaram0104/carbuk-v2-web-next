@@ -47,18 +47,16 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 export default function Home() {
   const [name, setName] = useState("Guest User");
-  const [pickup, setPickup] = useState("Kharagpur, India");
-  const [destination, setDestination] = useState("Kolkata, India");
+  const [pickup, setPickup] = useState("");
+  const [destination, setDestination] = useState("");
   const [pickupTime, setPickupTime] = useState("");
   const [pickupDate, setPickupDate] = useState("");
   const [noofPersons, setNoofPersons] = useState(1);
-  const [carType, setCarType] = useState("Sedan");
-  const [emailId, setEmailId] = useState("g@gmail.com");
-  const [mobileNumber, setMobileNumber] = useState("1234567891");
+  const [carType, setCarType] = useState("");
+  const [emailId, setEmailId] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
-  const [otpGenerate, setOtpGenerate] = useState(
-    Math.floor((1 + Math.random() * 9) * 1000)
-  );
+  const [otpGenerate, setOtpGenerate] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
   const [register, setRegister] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -84,8 +82,10 @@ export default function Home() {
     ) {
       const querySnapshot = await getDocs(bookingsRef);
       bookingNumber =
-        Math.max(...querySnapshot.docs.map((doc) => doc.data().bookingNumber)) +
-        1;
+        Math.max(
+          ...querySnapshot.docs.map((doc) => doc.data().bookingNumber),
+          0
+        ) + 1;
 
       await setDoc(doc(bookingsRef), {
         bookingNumber,
@@ -111,8 +111,8 @@ export default function Home() {
       let message = `CARBUK : New booking from ${pickup} to ${destination} at ${pickupDate}, ${pickupTime} Mobile No. ${mobileNumber} car_type ${carType}`;
 
       message = encodeURIComponent(message);
-      // const numbers = "7501541165"; //sitaram
-      const numbers = "9046674044"; //zafar
+      const numbers = "7501541165"; //sitaram
+      // const numbers = "9046674044"; //zafar
       const sender = "CARBUK";
       const url =
         address +
@@ -181,6 +181,7 @@ export default function Home() {
       pickupDate &&
       pickupTime
     ) {
+      setOtpGenerate(Math.floor((1 + Math.random() * 9) * 1000));
       const apikey = "MzY0MzcyMzE1NDc1NjEzNzQ4NjczMzRmNDM3OTc5NTI=";
       const address = "https://api.textlocal.in/send/?";
       let message = `Your carbuk.com Verification code is ${otpGenerate}`;
@@ -198,6 +199,8 @@ export default function Home() {
         message +
         "&sender=" +
         sender;
+      setOtp("");
+      setOtpVerified(false);
       const resp = await fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -246,7 +249,7 @@ export default function Home() {
   const pad = (p) => (p < 10 ? "0" : "") + p;
 
   useEffect(() => {
-    setPickupTime(`${pad(d.getHours())}:${pad(d.getMinutes())}`);
+    // setPickupTime(`${pad(d.getHours())}:${pad(d.getMinutes())}`);
     setPickupDate(
       `${pad(d.getFullYear())}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
     );
@@ -259,12 +262,15 @@ export default function Home() {
   };
 
   return (
-    <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
+    <div
+      className="d-flex align-items-center justify-content-center flex-column"
+      style={{ zIndex: 1 }}
+    >
       <Dialog
         open={modalShow}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>
@@ -274,7 +280,6 @@ export default function Home() {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <Button onClick={handleClicknotistack}>Show snackbar</Button>
           <Form
             className="card p-2 text-center"
             onSubmit={(e) => {
@@ -385,7 +390,9 @@ export default function Home() {
           <Button variant="outlined" onClick={handleClose}>
             Edit Booking
           </Button>
-          <Button onClick={() => addBooking()}>Confirm Booking</Button>
+          <Button onClick={() => addBooking()} disabled={!otpVerified}>
+            Confirm Booking
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -477,230 +484,209 @@ export default function Home() {
         <DialogActions></DialogActions>
       </Dialog>
 
-      <Image
-        src="/car-gray-2.jpg"
-        layout="fill"
-        objectFit="cover"
-        style={{ filter: "blur(2px)" }}
-        alt="background-image"
-      />
-      <NavBar handleLoginOpen={() => handleLoginOpen()} />
-      <div
-        className="d-flex align-items-center justify-content-center flex-column"
-        style={{ zIndex: 1 }}
-      >
-        <div style={{ backdropFilter: "blur(14px)", padding: "1rem" }}>
-          <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setD(new Date());
-              setModalShow(true);
-            }}
-          >
-            <div className="mb-3 d-flex flex-row">
-              <FloatingLabel
-                controlId="pickupInput"
-                label="Enter Pickup Location"
-                className="w-50 d-flex align-items-center me-2"
-              >
-                <Form.Control
-                  type="text"
-                  placeholder="kgp"
-                  value={pickup}
-                  onChange={(e) => setPickup(e.target.value)}
-                  className={`bg-gradient ${!pickup && "bg-secondary"}`}
-                />
-                <EditIcon
-                  style={{ backgroundColor: "white", height: "3.5rem" }}
-                />
-              </FloatingLabel>
-
-              <FloatingLabel
-                controlId="destinationInput"
-                label="Enter Destination"
-                className="w-50 d-flex align-items-center"
-              >
-                <Form.Control
-                  type="text"
-                  placeholder="kolkata"
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  className={`bg-gradient ${!destination && "bg-secondary"}`}
-                />
-                <EditIcon
-                  style={{ backgroundColor: "white", height: "3.5rem" }}
-                />
-              </FloatingLabel>
-            </div>
-            <div className="mb-3 d-flex flex-row">
-              <FloatingLabel
-                controlId="pickupTimeInput"
-                label="Select Pickup Time"
-                className="w-50 d-flex align-items-center me-2"
-              >
-                <Form.Control
-                  type="time"
-                  value={pickupTime}
-                  // min={`${pad(d.getHours())}:${pad(d.getMinutes())}`}
-                  onChange={(e) => setPickupTime(e.target.value)}
-                  required
-                  className={`bg-gradient ${
-                    !pickupTime ? "bg-secondary" : "bg-light"
-                  }`}
-                />
-                <EditIcon
-                  style={{ backgroundColor: "white", height: "3.5rem" }}
-                />
-              </FloatingLabel>
-              <FloatingLabel
-                controlId="pickupDateInput"
-                label="Select pickup Date"
-                className="w-50 d-flex align-items-center"
-              >
-                <Form.Control
-                  type="date"
-                  value={pickupDate}
-                  min={`${pad(d.getFullYear())}-${pad(d.getMonth() + 1)}-${pad(
-                    d.getDate()
-                  )}`}
-                  onChange={(e) => setPickupDate(e.target.value)}
-                  required
-                  className={`bg-gradient ${
-                    !pickupDate ? "bg-secondary" : "bg-light"
-                  }`}
-                />
-                <EditIcon
-                  style={{ backgroundColor: "white", height: "3.5rem" }}
-                />
-              </FloatingLabel>
-            </div>
-
-            <div className="mb-3 d-flex align-items-center justify-content-center">
-              <div className="text-white me-2 user-select-none">
-                Select number of persons
-              </div>
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                className="bg-gradient d-flex align-items-center justify-content-center"
-                onClick={() =>
-                  setNoofPersons(noofPersons > 1 ? noofPersons - 1 : 1)
-                }
-              >
-                <RemoveIcon style={{ fontSize: "20px" }} />
-              </Button>
-              <Button
-                type="button"
-                variant="primary"
-                size="sm"
-                className="bg-gradient px-4 mx-1"
-              >
-                {noofPersons}
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                className="bg-gradient d-flex align-items-center justify-content-center"
-                onClick={() =>
-                  setNoofPersons(noofPersons <= 50 ? noofPersons + 1 : 50)
-                }
-              >
-                <AddIcon style={{ fontSize: "20px" }} />
-              </Button>
-            </div>
-            <div className="mb-3 d-flex align-items-center justify-content-center">
-              <div className="text-white me-2 user-select-none">Car Type</div>
-              {CarTypes.map((carName, index) => (
-                <Button
-                  type="button"
-                  variant={carName === carType ? "primary" : "secondary"}
-                  size="sm"
-                  className="bg-gradient ms-1 px-3"
-                  key={index}
-                  onClick={() => setCarType(carName)}
-                >
-                  {carName}
-                </Button>
-              ))}
-            </div>
-
+      <div style={{ backdropFilter: "blur(14px)", padding: "1rem" }}>
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setD(new Date());
+            setModalShow(true);
+          }}
+        >
+          <div className="mb-3 d-flex flex-row">
             <FloatingLabel
-              controlId="carNameInput"
-              label="Type Car Name for any Specific Type(Optional)"
-              className="mb-2 d-flex align-items-center"
+              controlId="pickupInput"
+              label="Enter Pickup Location"
+              className="w-50 d-flex align-items-center me-2"
             >
               <Form.Control
                 type="text"
-                placeholder="carType"
-                value={CarTypes.includes(carType) ? "" : carType}
-                onChange={(e) => setCarType(e.target.value)}
+                placeholder="kgp"
+                value={pickup}
+                onChange={(e) => setPickup(e.target.value)}
+                className={`bg-gradient ${!pickup && "bg-secondary"}`}
+              />
+              <EditIcon
+                style={{ backgroundColor: "white", height: "3.5rem" }}
+              />
+            </FloatingLabel>
+
+            <FloatingLabel
+              controlId="destinationInput"
+              label="Enter Destination"
+              className="w-50 d-flex align-items-center"
+            >
+              <Form.Control
+                type="text"
+                placeholder="kolkata"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className={`bg-gradient ${!destination && "bg-secondary"}`}
+              />
+              <EditIcon
+                style={{ backgroundColor: "white", height: "3.5rem" }}
+              />
+            </FloatingLabel>
+          </div>
+          <div className="mb-3 d-flex flex-row">
+            <FloatingLabel
+              controlId="pickupTimeInput"
+              label="Select Pickup Time"
+              className="w-50 d-flex align-items-center me-2"
+            >
+              <Form.Control
+                type="time"
+                value={pickupTime}
+                onChange={(e) => setPickupTime(e.target.value)}
+                required
                 className={`bg-gradient ${
-                  (CarTypes.includes(carType) || carType === "") &&
-                  "bg-secondary"
+                  !pickupTime ? "bg-secondary" : "bg-light"
                 }`}
               />
               <EditIcon
                 style={{ backgroundColor: "white", height: "3.5rem" }}
               />
             </FloatingLabel>
-
             <FloatingLabel
-              controlId="emailInput"
-              label="Enter Email Id"
-              className="mb-2 d-flex align-items-center"
+              controlId="pickupDateInput"
+              label="Select pickup Date"
+              className="w-50 d-flex align-items-center"
             >
               <Form.Control
-                type="email"
-                placeholder="name@example.com"
-                value={emailId}
-                onChange={(e) => setEmailId(e.target.value)}
-                className={`bg-gradient ${!emailId && "bg-secondary"}`}
-              />
-              <EditIcon
-                style={{ backgroundColor: "white", height: "3.5rem" }}
-              />
-            </FloatingLabel>
-
-            <FloatingLabel
-              controlId="mobileInput"
-              label="Enter Mobile Number"
-              className="d-flex align-items-center"
-            >
-              <Form.Control
-                type="number"
-                placeholder="0000-000-000"
-                value={mobileNumber}
+                type="date"
+                value={pickupDate}
+                min={`${pad(d.getFullYear())}-${pad(d.getMonth() + 1)}-${pad(
+                  d.getDate()
+                )}`}
+                onChange={(e) => setPickupDate(e.target.value)}
                 required
-                onChange={(e) =>
-                  setMobileNumber(
-                    e.target.value.toString().length <= 10
-                      ? e.target.value
-                      : mobileNumber
-                  )
-                }
-                className={`bg-gradient ${!mobileNumber && "bg-secondary"}`}
+                className={`bg-gradient ${
+                  !pickupDate ? "bg-secondary" : "bg-light"
+                }`}
               />
               <EditIcon
                 style={{ backgroundColor: "white", height: "3.5rem" }}
               />
             </FloatingLabel>
-            <div className="text-center small text-muted mb-3">
-              (We will send OTP to the mobile number)
-            </div>
+          </div>
 
+          <div className="mb-3 d-flex align-items-center justify-content-center">
+            <div className="text-white me-2 user-select-none">
+              Select number of persons
+            </div>
             <Button
-              variant="primary"
-              type="submit"
-              className="w-100"
-              onClick={handleClickOpen}
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="bg-gradient d-flex align-items-center justify-content-center"
+              onClick={() =>
+                setNoofPersons(noofPersons > 1 ? noofPersons - 1 : 1)
+              }
             >
-              verify OTP
+              <RemoveIcon style={{ fontSize: "20px" }} />
             </Button>
-          </Form>
-        </div>
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className="bg-gradient px-4 mx-1"
+            >
+              {noofPersons}
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="bg-gradient d-flex align-items-center justify-content-center"
+              onClick={() =>
+                setNoofPersons(noofPersons <= 50 ? noofPersons + 1 : 50)
+              }
+            >
+              <AddIcon style={{ fontSize: "20px" }} />
+            </Button>
+          </div>
+          <div className="mb-3 d-flex align-items-center justify-content-center">
+            <div className="text-white me-2 user-select-none">Car Type</div>
+            {CarTypes.map((carName, index) => (
+              <Button
+                type="button"
+                variant={carName === carType ? "primary" : "secondary"}
+                size="sm"
+                className="bg-gradient ms-1 px-3"
+                key={index}
+                onClick={() => setCarType(carName)}
+              >
+                {carName}
+              </Button>
+            ))}
+          </div>
+
+          <FloatingLabel
+            controlId="carNameInput"
+            label="Type Car Name for any Specific Type(Optional)"
+            className="mb-2 d-flex align-items-center"
+          >
+            <Form.Control
+              type="text"
+              placeholder="carType"
+              value={CarTypes.includes(carType) ? "" : carType}
+              onChange={(e) => setCarType(e.target.value)}
+              className={`bg-gradient ${
+                (CarTypes.includes(carType) || carType === "") && "bg-secondary"
+              }`}
+            />
+            <EditIcon style={{ backgroundColor: "white", height: "3.5rem" }} />
+          </FloatingLabel>
+
+          <FloatingLabel
+            controlId="emailInput"
+            label="Enter Email Id"
+            className="mb-2 d-flex align-items-center"
+          >
+            <Form.Control
+              type="email"
+              placeholder="name@example.com"
+              value={emailId}
+              onChange={(e) => setEmailId(e.target.value)}
+              className={`bg-gradient ${!emailId && "bg-secondary"}`}
+            />
+            <EditIcon style={{ backgroundColor: "white", height: "3.5rem" }} />
+          </FloatingLabel>
+
+          <FloatingLabel
+            controlId="mobileInput"
+            label="Enter Mobile Number"
+            className="d-flex align-items-center"
+          >
+            <Form.Control
+              type="number"
+              placeholder="0000-000-000"
+              value={mobileNumber}
+              required
+              onChange={(e) =>
+                setMobileNumber(
+                  e.target.value.toString().length <= 10
+                    ? e.target.value
+                    : mobileNumber
+                )
+              }
+              className={`bg-gradient ${!mobileNumber && "bg-secondary"}`}
+            />
+            <EditIcon style={{ backgroundColor: "white", height: "3.5rem" }} />
+          </FloatingLabel>
+          <div className="text-center small text-muted mb-3">
+            (We will send OTP to the mobile number)
+          </div>
+
+          <Button
+            variant="primary"
+            type="submit"
+            className="w-100"
+            onClick={handleClickOpen}
+          >
+            verify OTP
+          </Button>
+        </Form>
       </div>
-    </main>
+    </div>
   );
 }

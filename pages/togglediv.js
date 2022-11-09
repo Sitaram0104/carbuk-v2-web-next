@@ -14,43 +14,31 @@ export default function Togglediv() {
   };
 
   return (
-    <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
-      <Image
-        src="/car-gray-2.jpg"
-        layout="fill"
-        objectFit="cover"
-        // style={{ filter: "blur(2px)" }}
-        style={{ zIndex: -1000 }}
-        alt="background-image"
+    <div
+      className="d-flex align-items-center justify-content-center flex-column"
+      style={{ zIndex: 1 }}
+    >
+      <CheckBox
+        label="Login Section"
+        value={checkedOne === "Login" ? true : false}
+        onChange={() => handleChangeOne("Login")}
+        id="s1"
+        Comp={<LoginComp />}
       />
-      {/* <NavBar /> */}
-      <div
-      // style={{ backdropFilter: "blur(14px)" }}
-      >
-        <div className="container main">
-          <CheckBox
-            label="Login Section"
-            value={checkedOne === "Login" ? true : false}
-            onChange={() => handleChangeOne("Login")}
-            id="s1"
-            Comp={<LoginComp />}
-          />
-          <CheckBox
-            label="Book Your Ride"
-            value={checkedOne === "Book" ? true : false}
-            onChange={() => handleChangeOne("Book")}
-            id="s2"
-            Comp={<BookYourRide />}
-          />
-          <CheckBox
-            label="Confirm Your Ride"
-            value={checkedOne === "Confirm" ? true : false}
-            onChange={() => handleChangeOne("Confirm")}
-            id="s3"
-            Comp={<ConfirmRide />}
-          />
-        </div>
-      </div>
-    </main>
+      <CheckBox
+        label="Book Your Ride"
+        value={checkedOne === "Book" ? true : false}
+        onChange={() => handleChangeOne("Book")}
+        id="s2"
+        Comp={<BookYourRide />}
+      />
+      <CheckBox
+        label="Confirm Your Ride"
+        value={checkedOne === "Confirm" ? true : false}
+        onChange={() => handleChangeOne("Confirm")}
+        id="s3"
+        Comp={<ConfirmRide />}
+      />
+    </div>
   );
 }

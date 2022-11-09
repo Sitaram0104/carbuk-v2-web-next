@@ -25,7 +25,7 @@ export default function NavBar({ handleLoginOpen }) {
             <h2 className="text-white user-select-none">Welcome to Carbuk</h2>
           </div>
         </Link>
-        <div style={{ zIndex: 2 }}>
+        {/* <div style={{ zIndex: 2 }}>
           <Link href="/">
             <Button variant="primary" className="mb-2 me-1">
               Home
@@ -48,17 +48,7 @@ export default function NavBar({ handleLoginOpen }) {
               new page testing
             </Button>
           </Link>
-
-          {/* <Button variant="primary" className="mb-2 me-1">
-            Admin
-          </Button>
-          <Button variant="primary" className="mb-2 me-1">
-            Moderator
-          </Button>
-          <Button variant="primary" className="mb-2 me-1">
-            Driver
-          </Button> */}
-        </div>
+        </div> */}
       </div>
     </div>
   );

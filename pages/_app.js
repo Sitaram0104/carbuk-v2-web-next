@@ -3,6 +3,8 @@ import { store } from "../store/store";
 import { Provider } from "react-redux";
 import Head from "next/head";
 import { SnackbarProvider } from "notistack";
+import NavBar from "../components/NavBar";
+import Image from "next/image";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -19,7 +21,17 @@ function MyApp({ Component, pageProps }) {
             key="ogdesc"
           />
         </Head>
-        <Component {...pageProps} />
+        <main style={{ position: "relative", width: "100vw", height: "100vh" }}>
+          <Image
+            src="/car-gray-2.jpg"
+            layout="fill"
+            objectFit="cover"
+            style={{ filter: "blur(2px)" }}
+            alt="background-image"
+          />
+          <NavBar />
+          <Component {...pageProps} />
+        </main>
       </SnackbarProvider>
     </Provider>
   );

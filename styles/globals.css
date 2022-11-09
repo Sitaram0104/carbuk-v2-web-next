@@ -90,6 +90,8 @@ tr.served:hover {
 
 .containerSection {
   background-color: "fff;";
+  width: 95%;
+  max-width: 640px;
 }
 
 .containerSection > label {
