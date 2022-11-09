@@ -56,7 +56,9 @@ export default function Home() {
   const [emailId, setEmailId] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
-  const [otpGenerate, setOtpGenerate] = useState("");
+  const [otpGenerate, setOtpGenerate] = useState(
+    Math.floor((1 + Math.random() * 9) * 1000)
+  );
   const [otpVerified, setOtpVerified] = useState(false);
   const [register, setRegister] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -182,7 +184,6 @@ export default function Home() {
       pickupDate &&
       pickupTime
     ) {
-      setOtpGenerate(Math.floor((1 + Math.random() * 9) * 1000));
       const apikey = "MzY0MzcyMzE1NDc1NjEzNzQ4NjczMzRmNDM3OTc5NTI=";
       const address = "https://api.textlocal.in/send/?";
       let message = `Your carbuk.com Verification code is ${otpGenerate}`;
@@ -285,6 +286,7 @@ export default function Home() {
             className="card p-2 text-center"
             onSubmit={(e) => {
               e.preventDefault();
+              console.log({ otp, otpGenerate });
               if (Number(otp) === otpGenerate) {
                 setOtpVerified(true);
                 enqueueSnackbar("otp verified", {
