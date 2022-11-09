@@ -442,34 +442,6 @@ export default function Home() {
             )}
           </tbody>
         </table>
-
-        <button
-          onClick={() =>
-            setBookings([
-              {
-                key: bookings.length + 1,
-                bookingNumber:
-                  Math.max(
-                    ...bookings.map(({ bookingNumber }) => bookingNumber),
-                    0
-                  ) + 1,
-                carType: "0",
-                destination: "0",
-                emailId: "0@gmail.com",
-                mobileNumber: 1,
-                name: "00",
-                noofPerson: 1,
-                pickup: "0",
-                pickupDate: "2022-10-08",
-                pickupTime: "15:20",
-                servedBy: "Zafar",
-              },
-              ...bookings,
-            ])
-          }
-        >
-          Add
-        </button>
       </div>
     </div>
   );
