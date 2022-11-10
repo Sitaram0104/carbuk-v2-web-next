@@ -113,8 +113,8 @@ export default function Home() {
       let message = `CARBUK : New booking from ${pickup} to ${destination} at ${pickupDate}, ${pickupTime} Mobile No. ${mobileNumber} car_type ${carType}`;
 
       message = encodeURIComponent(message);
-      const numbers = "7501541165"; //sitaram
-      // const numbers = "7586077185"; //admin
+      // const numbers = "7501541165"; //sitaram
+      const numbers = "7586077185"; //admin
       // const numbers = "9046674044"; //zafar
       const sender = "CARBUK";
       const url =
