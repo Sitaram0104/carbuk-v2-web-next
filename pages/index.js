@@ -100,7 +100,7 @@ export default function Home() {
         pickup,
         pickupDate,
         pickupTime,
-        servedBy: "ABCD",
+        servedBy: "",
         timestamp: serverTimestamp(),
       }).then(() => {
         setModalShow(false);
